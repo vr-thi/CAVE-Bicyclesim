@@ -1,0 +1,439 @@
+fileFormatVersion: 2
+guid: c23b9e7abfd8295459e9138a9d1be147
+timeCreated: 1527458443
+licenseType: Free
+ModelImporter:
+  serializedVersion: 20
+  fileIDToRecycleName:
+    100000: Camera01
+    100002: Camera01.Target
+    100004: Dummy01
+    100006: pension
+    100008: pension alfeizar buardilla del
+    100010: pension alfeizares buardilla tras
+    100012: pension barandilla buardilla del
+    100014: 'pension barandilla buardilla tras '
+    100016: pension barandilla columnas der
+    100018: pension barandilla columnas izq
+    100020: pension barandilla columnas tras
+    100022: pension buardilla delantera
+    100024: pension buardilla trasera
+    100026: 'pension cartel inferior '
+    100028: pension chimenea del
+    100030: pension chimenea tras
+    100032: pension columnas delanteras
+    100034: pension columnas delanteras 1
+    100036: pension columnas delanteras 2
+    100038: pension columnas portal
+    100040: pension cornisa buardilla del
+    100042: pension cornisa buardilla tras
+    100044: pension cornisa inferior
+    100046: pension cornisa superior del
+    100048: pension cornisa superior tras
+    100050: pension cristales buardilla del
+    100052: pension cristales buardilla tras
+    100054: pension cristales delanteros
+    100056: pension cristales inferior der
+    100058: pension cristales inferiores del
+    100060: pension cristales inferiores izq
+    100062: pension cristales inferiores tras
+    100064: pension cristales laterales
+    100066: pension cristales laterales 1
+    100068: pension cristales traseros
+    100070: pension cristalitos
+    100072: pension cristalitos 1
+    100074: pension entradita
+    100076: pension escalera
+    100078: pension fachada inferior
+    100080: pension fachada sup
+    100082: pension marcos lat
+    100084: pension marcos lat 1
+    100086: pension marcos traseros
+    100088: pension pension cartel sup
+    100090: pension portal
+    100092: pension puerta
+    100094: 'pension tapa chimenea '
+    100096: pension tapa chimenea del
+    100098: pension tapa portal
+    100100: pension tejado
+    100102: 'pension tejado buardilla del '
+    100104: pension tejado buardilla tras
+    100106: pension ventanas buardilla del
+    100108: pension ventanas buardilla tras
+    100110: pension ventanas delanteras
+    100112: pension ventanas inferior der
+    100114: pension ventanas inferiores del
+    100116: pension ventanas inferiores izq
+    100118: pension ventanas inferiores tras
+    100120: pension ventanas lateral der
+    100122: pension ventanas lateral izq
+    100124: pension ventanas traseras
+    100126: pension verjas laterales
+    100128: pension verjas laterales 1
+    100130: pension verjas traseras
+    100132: pension voladizos laterales
+    100134: pension voladizos laterales 1
+    100136: Spot01
+    100138: Spot01.Target
+    100140: Spot02
+    100142: Spot02.Target
+    100144: Spot03
+    100146: Spot03.Target
+    100148: Spot04
+    100150: Spot04.Target
+    100152: Spot05
+    100154: Spot05.Target
+    100156: //RootNode
+    400000: Camera01
+    400002: Camera01.Target
+    400004: Dummy01
+    400006: pension
+    400008: pension alfeizar buardilla del
+    400010: pension alfeizares buardilla tras
+    400012: pension barandilla buardilla del
+    400014: 'pension barandilla buardilla tras '
+    400016: pension barandilla columnas der
+    400018: pension barandilla columnas izq
+    400020: pension barandilla columnas tras
+    400022: pension buardilla delantera
+    400024: pension buardilla trasera
+    400026: 'pension cartel inferior '
+    400028: pension chimenea del
+    400030: pension chimenea tras
+    400032: pension columnas delanteras
+    400034: pension columnas delanteras 1
+    400036: pension columnas delanteras 2
+    400038: pension columnas portal
+    400040: pension cornisa buardilla del
+    400042: pension cornisa buardilla tras
+    400044: pension cornisa inferior
+    400046: pension cornisa superior del
+    400048: pension cornisa superior tras
+    400050: pension cristales buardilla del
+    400052: pension cristales buardilla tras
+    400054: pension cristales delanteros
+    400056: pension cristales inferior der
+    400058: pension cristales inferiores del
+    400060: pension cristales inferiores izq
+    400062: pension cristales inferiores tras
+    400064: pension cristales laterales
+    400066: pension cristales laterales 1
+    400068: pension cristales traseros
+    400070: pension cristalitos
+    400072: pension cristalitos 1
+    400074: pension entradita
+    400076: pension escalera
+    400078: pension fachada inferior
+    400080: pension fachada sup
+    400082: pension marcos lat
+    400084: pension marcos lat 1
+    400086: pension marcos traseros
+    400088: pension pension cartel sup
+    400090: pension portal
+    400092: pension puerta
+    400094: 'pension tapa chimenea '
+    400096: pension tapa chimenea del
+    400098: pension tapa portal
+    400100: pension tejado
+    400102: 'pension tejado buardilla del '
+    400104: pension tejado buardilla tras
+    400106: pension ventanas buardilla del
+    400108: pension ventanas buardilla tras
+    400110: pension ventanas delanteras
+    400112: pension ventanas inferior der
+    400114: pension ventanas inferiores del
+    400116: pension ventanas inferiores izq
+    400118: pension ventanas inferiores tras
+    400120: pension ventanas lateral der
+    400122: pension ventanas lateral izq
+    400124: pension ventanas traseras
+    400126: pension verjas laterales
+    400128: pension verjas laterales 1
+    400130: pension verjas traseras
+    400132: pension voladizos laterales
+    400134: pension voladizos laterales 1
+    400136: Spot01
+    400138: Spot01.Target
+    400140: Spot02
+    400142: Spot02.Target
+    400144: Spot03
+    400146: Spot03.Target
+    400148: Spot04
+    400150: Spot04.Target
+    400152: Spot05
+    400154: Spot05.Target
+    400156: //RootNode
+    2000000: Camera01
+    2300000: pension alfeizar buardilla del
+    2300002: pension alfeizares buardilla tras
+    2300004: pension barandilla buardilla del
+    2300006: 'pension barandilla buardilla tras '
+    2300008: pension barandilla columnas der
+    2300010: pension barandilla columnas izq
+    2300012: pension barandilla columnas tras
+    2300014: pension buardilla delantera
+    2300016: pension buardilla trasera
+    2300018: 'pension cartel inferior '
+    2300020: pension chimenea del
+    2300022: pension chimenea tras
+    2300024: pension columnas delanteras
+    2300026: pension columnas delanteras 1
+    2300028: pension columnas delanteras 2
+    2300030: pension columnas portal
+    2300032: pension cornisa buardilla del
+    2300034: pension cornisa buardilla tras
+    2300036: pension cornisa inferior
+    2300038: pension cornisa superior del
+    2300040: pension cornisa superior tras
+    2300042: pension cristales buardilla del
+    2300044: pension cristales buardilla tras
+    2300046: pension cristales delanteros
+    2300048: pension cristales inferior der
+    2300050: pension cristales inferiores del
+    2300052: pension cristales inferiores izq
+    2300054: pension cristales inferiores tras
+    2300056: pension cristales laterales
+    2300058: pension cristales laterales 1
+    2300060: pension cristales traseros
+    2300062: pension cristalitos
+    2300064: pension cristalitos 1
+    2300066: pension entradita
+    2300068: pension escalera
+    2300070: pension fachada inferior
+    2300072: pension fachada sup
+    2300074: pension marcos lat
+    2300076: pension marcos lat 1
+    2300078: pension marcos traseros
+    2300080: pension pension cartel sup
+    2300082: pension portal
+    2300084: pension puerta
+    2300086: 'pension tapa chimenea '
+    2300088: pension tapa chimenea del
+    2300090: pension tapa portal
+    2300092: pension tejado
+    2300094: 'pension tejado buardilla del '
+    2300096: pension tejado buardilla tras
+    2300098: pension ventanas buardilla del
+    2300100: pension ventanas buardilla tras
+    2300102: pension ventanas delanteras
+    2300104: pension ventanas inferior der
+    2300106: pension ventanas inferiores del
+    2300108: pension ventanas inferiores izq
+    2300110: pension ventanas inferiores tras
+    2300112: pension ventanas lateral der
+    2300114: pension ventanas lateral izq
+    2300116: pension ventanas traseras
+    2300118: pension verjas laterales
+    2300120: pension verjas laterales 1
+    2300122: pension verjas traseras
+    2300124: pension voladizos laterales
+    2300126: pension voladizos laterales 1
+    3300000: pension alfeizar buardilla del
+    3300002: pension alfeizares buardilla tras
+    3300004: pension barandilla buardilla del
+    3300006: 'pension barandilla buardilla tras '
+    3300008: pension barandilla columnas der
+    3300010: pension barandilla columnas izq
+    3300012: pension barandilla columnas tras
+    3300014: pension buardilla delantera
+    3300016: pension buardilla trasera
+    3300018: 'pension cartel inferior '
+    3300020: pension chimenea del
+    3300022: pension chimenea tras
+    3300024: pension columnas delanteras
+    3300026: pension columnas delanteras 1
+    3300028: pension columnas delanteras 2
+    3300030: pension columnas portal
+    3300032: pension cornisa buardilla del
+    3300034: pension cornisa buardilla tras
+    3300036: pension cornisa inferior
+    3300038: pension cornisa superior del
+    3300040: pension cornisa superior tras
+    3300042: pension cristales buardilla del
+    3300044: pension cristales buardilla tras
+    3300046: pension cristales delanteros
+    3300048: pension cristales inferior der
+    3300050: pension cristales inferiores del
+    3300052: pension cristales inferiores izq
+    3300054: pension cristales inferiores tras
+    3300056: pension cristales laterales
+    3300058: pension cristales laterales 1
+    3300060: pension cristales traseros
+    3300062: pension cristalitos
+    3300064: pension cristalitos 1
+    3300066: pension entradita
+    3300068: pension escalera
+    3300070: pension fachada inferior
+    3300072: pension fachada sup
+    3300074: pension marcos lat
+    3300076: pension marcos lat 1
+    3300078: pension marcos traseros
+    3300080: pension pension cartel sup
+    3300082: pension portal
+    3300084: pension puerta
+    3300086: 'pension tapa chimenea '
+    3300088: pension tapa chimenea del
+    3300090: pension tapa portal
+    3300092: pension tejado
+    3300094: 'pension tejado buardilla del '
+    3300096: pension tejado buardilla tras
+    3300098: pension ventanas buardilla del
+    3300100: pension ventanas buardilla tras
+    3300102: pension ventanas delanteras
+    3300104: pension ventanas inferior der
+    3300106: pension ventanas inferiores del
+    3300108: pension ventanas inferiores izq
+    3300110: pension ventanas inferiores tras
+    3300112: pension ventanas lateral der
+    3300114: pension ventanas lateral izq
+    3300116: pension ventanas traseras
+    3300118: pension verjas laterales
+    3300120: pension verjas laterales 1
+    3300122: pension verjas traseras
+    3300124: pension voladizos laterales
+    3300126: pension voladizos laterales 1
+    4300000: pension chimenea del
+    4300002: pension cornisa inferior
+    4300004: pension marcos traseros
+    4300006: pension barandilla columnas izq
+    4300008: pension tapa portal
+    4300010: pension voladizos laterales
+    4300012: pension voladizos laterales
+    4300014: pension cornisa superior tras
+    4300016: pension cornisa buardilla tras
+    4300018: pension cornisa buardilla del
+    4300020: pension alfeizares buardilla tras
+    4300022: pension alfeizar buardilla del
+    4300024: pension cornisa superior del
+    4300026: pension puerta
+    4300028: pension ventanas inferiores tras
+    4300030: pension ventanas inferiores izq
+    4300032: pension cristales inferiores izq
+    4300034: pension ventanas inferiores del
+    4300036: pension cristales inferiores tras
+    4300038: pension cristales inferiores del
+    4300040: pension entradita
+    4300042: pension fachada inferior
+    4300044: pension escalera
+    4300046: pension columnas portal
+    4300048: pension portal
+    4300050: pension cristales inferior der
+    4300052: pension ventanas inferior der
+    4300054: 'pension tapa chimenea '
+    4300056: 'pension barandilla buardilla tras '
+    4300058: pension cristales buardilla del
+    4300060: pension buardilla trasera
+    4300062: pension barandilla buardilla del
+    4300064: pension tapa chimenea del
+    4300066: 'pension tejado buardilla del '
+    4300068: pension pension cartel sup
+    4300070: pension chimenea tras
+    4300072: pension tejado buardilla tras
+    4300074: pension ventanas buardilla del
+    4300076: pension ventanas buardilla tras
+    4300078: pension cristales buardilla tras
+    4300080: pension tejado
+    4300082: pension buardilla delantera
+    4300084: pension fachada sup
+    4300086: pension ventanas lateral izq
+    4300088: pension cristales laterales
+    4300090: pension cristalitos
+    4300092: pension ventanas traseras
+    4300094: pension verjas laterales
+    4300096: pension verjas traseras
+    4300098: 'pension cartel inferior '
+    4300100: pension cristales delanteros
+    4300102: pension ventanas delanteras
+    4300104: pension cristales traseros
+    4300106: pension cristalitos
+    4300108: pension cristales laterales
+    4300110: pension ventanas lateral der
+    4300112: pension verjas laterales
+    4300114: pension marcos lat
+    4300116: pension marcos lat
+    4300118: pension columnas delanteras
+    4300120: pension columnas delanteras
+    4300122: pension columnas delanteras
+    4300124: pension barandilla columnas tras
+    4300126: pension barandilla columnas der
+    7400000: Take 001
+    9500000: //RootNode
+    10800000: Spot01
+    10800002: Spot02
+    10800004: Spot03
+    10800006: Spot04
+    10800008: Spot05
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
