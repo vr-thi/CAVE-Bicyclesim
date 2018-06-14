@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
-using Cave;
 using UnityEngine.Networking;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -12,12 +11,6 @@ using UnityEditor;
 public class BycicleBehaviour : MonoBehaviour
 {
 
-    //changes 
-    // Cycle: Mass 60, Freeze Position Y 
-    // Wheels: Mass 20, Wheel damping rate 0.25, Suspension distance 0 
-    // Spring Default ... rest default 
-    // keine Anpassung der Geschwindigkeit 
-    // 
 
     public GameObject wheelV;
     public GameObject wheelH;
@@ -27,7 +20,7 @@ public class BycicleBehaviour : MonoBehaviour
     public GameObject camera;
     public GameObject camLerpPoint;
 
-    public test testScript;
+    public test dataInput;
 
     public bool showBycicle;
     public bool debugging;
@@ -61,6 +54,7 @@ public class BycicleBehaviour : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        dataInput.speed.changeSampleCount(2);
         wasinMotion = false;
         startPos = transform.position;
 
@@ -97,21 +91,14 @@ public class BycicleBehaviour : MonoBehaviour
         if (!debugging && GetComponent<NetworkIdentity>().isServer)
         {
             // take Values from Sensor or from Editor
-            if (!debugging)
-            {
-                angle = (float)Test_ReadData.AngleForMono;
-                angle = angle / 1.7f; // smoothing the angle because real input degrees are to rough (I get motion sickness)
-                speed = (float)Test_ReadData.speedForMono * 50000; // somehow the cave divides the sensor input by aprox. 40000
-                float a = 0.6f;
-                speed = speed * a + (1 - a) * speedFromLastFrame;
-                speedFromLastFrame = speed;
-            }
+            angle = (float)Test_ReadData.AngleForMono;
+            //angle = angle 1.7f; // smoothing the angle because real input degrees are to rough (I get motion sickness)
+            speed = (float)Test_ReadData.speedForMono * 50000; // somehow the cave divides the sensor input by aprox. 40000
+            float a = 0.6f;
+            speed = speed * a + (1 - a) * speedFromLastFrame;
+            speedFromLastFrame = speed;
+
             // if in Debug Mode, take the Data from inEditorValues
-            else
-            {
-                angle = angleDebug;
-                speed = speedDebug;
-            }
 
             ApplySensorDataToBycicle();
 
@@ -121,6 +108,19 @@ public class BycicleBehaviour : MonoBehaviour
 
 
             //Lerp Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
+            camera.transform.position = Vector3.Lerp(camera.gameObject.transform.position, camLerpPoint.transform.position, .5f);
+            camera.transform.rotation = Quaternion.Lerp(camera.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
+        }
+        else if (debugging)
+        {
+
+            angle = angleDebug;
+            speed = speedDebug;
+
+            if (showBycicle)
+                ShowVirtualBycicle();
+
+            ApplySensorDataToBycicle();
             camera.transform.position = Vector3.Lerp(camera.gameObject.transform.position, camLerpPoint.transform.position, .5f);
             camera.transform.rotation = Quaternion.Lerp(camera.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
         }
@@ -148,6 +148,12 @@ public class BycicleBehaviour : MonoBehaviour
         // find the Middle of the turning circle 
         turningCenter = (transform.position + (transform.right.normalized * turnRadius));
 
+        //if (testScript.speed.getSampleCount() < 9)
+        //{
+        //    testScript.speed.increaseSampleCount();
+        //}
+
+
         if (angle <= 0 && !standing)
         {
             Vector3 curDirection = turningCenter - transform.position;
@@ -165,7 +171,7 @@ public class BycicleBehaviour : MonoBehaviour
         speedLog = ((transform.position - mLastPosition).magnitude / Time.deltaTime) * 3.6f;
         mLastPosition = transform.position;
 
-        Debug.Log("SensorDataSpeed = " + speed + "Bike Speedlog = " + speedLog + " ..... SensorSpeed without Calculation: " + speedx);
+        //Debug.Log("SensorDataSpeed = " + speed + "Bike Speedlog = " + speedLog + " ..... SensorSpeed without Calculation: " + speedx);
     }
 
     IEnumerator CompareSpeedSamples()
@@ -189,7 +195,8 @@ public class BycicleBehaviour : MonoBehaviour
         standing = standingStill;
         if (standing && wasinMotion)
         {
-            testScript.speed.resetSpeed();
+            dataInput.speed.resetSpeed();
+            dataInput.speed.changeSampleCount(2);
             wasinMotion = false;
         }
         CoroutineRunning = false;

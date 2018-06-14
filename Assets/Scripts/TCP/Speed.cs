@@ -12,13 +12,18 @@ public class Speed {
 	private float fAverTimeDiff;			//[ms]
 	private bool fSpeedAvailable = false;
 
-	/**
+    public int getSampleCount()
+    {
+        return this.fSample;
+    }
+
+    /**
 	 * Creator of Speed-Class.
 	 * @param sensorCount - Count of sensor's activations pro full turn of Wheel. 
 	 * @param sampleNbr - Number of samples to calculation of speed. 
 	 * @param wheelLine - Length of way pro full turn of Wheel.
 	 */
-	public Speed(int sensorCount, int sampleNbr, double wheelLine) {
+    public Speed(int sensorCount, int sampleNbr, double wheelLine) {
 		this.fSensorCnt = sensorCount;
 		this.fSample = sampleNbr;		
 		this.fWheelLine = wheelLine;
@@ -111,5 +116,15 @@ public class Speed {
 		this.fCnt = 0;
 		this.fSpeedAvailable = false;
 	}
+
+    public void changeSampleCount(int sample)
+    {
+        this.fSample = sample;
+    }
+
+    public void increaseSampleCount()
+    {
+        this.fSample += 1;
+    }
 }
 
