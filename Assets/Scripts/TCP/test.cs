@@ -11,10 +11,12 @@ public class test : MonoBehaviour {
 	Test_ReadData trd;
 
 	AVR_NetClient avr;
+
+    public Speed speed; 
 	// Use this for initialization
 	void Start () {
 
-		IniFile ini = new IniFile ("C:\\Users\\icuser\\Desktop\\CAVE_UNITY\\Unity_Projects\\Sebastian_K\\FahrradSim\\FahrradSim_002Unity5\\FahrradSim002Unity5\\Assets\\Scripts\\FahrradCom.EXE.ini");
+		IniFile ini = new IniFile ("C:\\Users\\icuser\\Desktop\\CAVE_UNITY\\Unity_Projects\\Sebastian_K\\FahrradSim\\FahrradSim_002\\FahrradSim002Unity5\\Assets\\Scripts\\FahrradCom.EXE.ini");
 
 		string ip1 = ini.IniReadValue ("TCP", "IP");
 
@@ -23,7 +25,7 @@ public class test : MonoBehaviour {
 								Int32.Parse(ini.IniReadValue ("TCP", "Port")),
 								Int32.Parse(ini.IniReadValue ("TCP", "BufferSize")));
 
-		Speed speed = new Speed(Int32.Parse(ini.IniReadValue("Speed","SensorCount")),
+		speed = new Speed(Int32.Parse(ini.IniReadValue("Speed","SensorCount")),
 			Int32.Parse(ini.IniReadValue("Speed", "SpeedSample")),
 			Double.Parse(ini.IniReadValue("Speed","WheelLine")));
 			

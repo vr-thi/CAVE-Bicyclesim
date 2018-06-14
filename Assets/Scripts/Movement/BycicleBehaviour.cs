@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
@@ -9,7 +7,9 @@ using UnityEngine.Networking;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-public class SteeringWheelcollider : MonoBehaviour
+
+
+public class BycicleBehaviour : MonoBehaviour
 {
 
     //changes 
@@ -19,11 +19,6 @@ public class SteeringWheelcollider : MonoBehaviour
     // keine Anpassung der Geschwindigkeit 
     // 
 
-    public WheelCollider HL;
-    public WheelCollider HR;
-    public WheelCollider VL;
-    public WheelCollider VR;
-
     public GameObject wheelV;
     public GameObject wheelH;
     public GameObject handlebar;
@@ -32,12 +27,14 @@ public class SteeringWheelcollider : MonoBehaviour
     public GameObject camera;
     public GameObject camLerpPoint;
 
-    public bool wheelcolliderPhysics;
+    public test testScript;
 
     public bool showBycicle;
     public bool debugging;
 
+
     private float speed;
+    private float speedFromLastFrame = 0;
     private float angle;
 
     [Range(-40.0f, 40.0f)]
@@ -45,37 +42,33 @@ public class SteeringWheelcollider : MonoBehaviour
     [Range(0f, 30f)]
     public float speedDebug = 0f;
 
-    InputTransformationMessage inputmessage; 
 
     // measured tire spacing is roughly 109 cm
     private float tirespacing = 1.09f;
 
     private Vector3 startPos;
     private Vector3 centerofMass;
+
     private float speedLog;
+    private bool wasinMotion;
 
-
-    private float[] speedSample = new float[100];
-    int i = 0;
     bool standing;
     bool CoroutineRunning = false;
 
     Vector3 mLastPosition = Vector3.zero;
 
+
     // Use this for initialization
     void Start()
     {
-
-        string s = Network.player.ipAddress;
-        Debug.Log(s);
-        standing = false;
+        wasinMotion = false;
         startPos = transform.position;
 
         // lower the center of mass in order to make the bike more stable 
         centerofMass = this.GetComponent<Rigidbody>().centerOfMass;
         centerofMass.y = -1.5f;
         this.GetComponent<Rigidbody>().centerOfMass = centerofMass;
-        
+
 
         if (showBycicle)
         {
@@ -91,132 +84,61 @@ public class SteeringWheelcollider : MonoBehaviour
             handlebar.SetActive(false);
             frame.SetActive(false);
         }
-        
+
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GetComponent<NetworkIdentity>().isServer)
+        // The Cave will automaticall distribute the script and run it from all PCs, 
+        // to avoid this behaviour we need to check if the executing PC is the Master 
+        // Otherwise the Cave will freeze 
+        if (!debugging && GetComponent<NetworkIdentity>().isServer)
         {
             // take Values from Sensor or from Editor
             if (!debugging)
             {
                 angle = (float)Test_ReadData.AngleForMono;
-                angle = angle / 1.7f; // smoothing the angle because real input degrees are to rough for my motionsystem
-                speed = (float)Test_ReadData.speedForMono * 40000; // somehow the cave divides the sensor input by aprox. 40000
+                angle = angle / 1.7f; // smoothing the angle because real input degrees are to rough (I get motion sickness)
+                speed = (float)Test_ReadData.speedForMono * 50000; // somehow the cave divides the sensor input by aprox. 40000
+                float a = 0.6f;
+                speed = speed * a + (1 - a) * speedFromLastFrame;
+                speedFromLastFrame = speed;
             }
+            // if in Debug Mode, take the Data from inEditorValues
             else
             {
                 angle = angleDebug;
                 speed = speedDebug;
             }
 
-            if (wheelcolliderPhysics)
-            {
-                RotateWithWheelcolliders();
-            }
-            else
-            {
-                RotateWithRotateAround();
-            }
+            ApplySensorDataToBycicle();
+
+
             if (showBycicle)
-            {
                 ShowVirtualBycicle();
-            }
-
-
-
 
 
             //Lerp Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
             camera.transform.position = Vector3.Lerp(camera.gameObject.transform.position, camLerpPoint.transform.position, .5f);
             camera.transform.rotation = Quaternion.Lerp(camera.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
-
         }
-
     }
 
 
-    IEnumerator CompareSpeedSamples()
-    {
-        bool standingStill = true;
-        float time = Time.time;
-        float lastSpeed = speed;
-        //Debug.Log("Last Speed" + lastSpeed + " Speed " + speed);
-        while ((Time.time - time) < 0.3f)
-        {
-            if (speed != lastSpeed)
-            {
-                standingStill = false;
-            }
-            lastSpeed = speed;
-            yield return null;
-        }
-        standing = standingStill;
-        CoroutineRunning = false;
-        yield return null;
-    }
-
-
-
-    void RotateWithWheelcolliders()
-    {
-        if (!debugging)
-        {
-            //Breaking
-            if (speed > 0.5 && !CoroutineRunning)
-            {
-                StartCoroutine(CompareSpeedSamples());
-                CoroutineRunning = true;
-            }
-        }
-
-
-        if (!standing)
-        { //driving
-            HR.brakeTorque = 0;
-            HL.brakeTorque = 0;
-            HR.motorTorque = speed;
-            HL.motorTorque = speed;
-        }
-        else
-        { // braking
-            HR.brakeTorque = 30;
-            HL.brakeTorque = 30;
-            HL.motorTorque = 0;
-            HR.motorTorque = 0;
-        }
-        VL.steerAngle = angle;
-        VR.steerAngle = angle;
-        speedLog = ((transform.position - mLastPosition).magnitude / Time.deltaTime) * 3.6f;
-        mLastPosition = transform.position;
-        if (speedLog > speed)
-        {
-            HR.motorTorque = 0;
-            HL.motorTorque = 0;
-        }
-
-
-    }
-
-
-    void RotateWithRotateAround()
+    void ApplySensorDataToBycicle()
     {
 
+        float speedx = speed;
         speed *= (30 / 1.88f);
 
-        if (!debugging)
+        //check if Breaking
+        if (!debugging && !CoroutineRunning)
         {
-            //Breaking
-            if (speed > 0.5 && !CoroutineRunning)
-            {
-                StartCoroutine(CompareSpeedSamples());
-                CoroutineRunning = true;
-            }
+            StartCoroutine(CompareSpeedSamples());
+            CoroutineRunning = true;
         }
-
 
 
         Vector3 turningCenter;
@@ -226,13 +148,13 @@ public class SteeringWheelcollider : MonoBehaviour
         // find the Middle of the turning circle 
         turningCenter = (transform.position + (transform.right.normalized * turnRadius));
 
-        if (angle < 0)
+        if (angle <= 0 && !standing)
         {
             Vector3 curDirection = turningCenter - transform.position;
             turningCenter = transform.position - curDirection;
             transform.RotateAround(turningCenter, Vector3.up, -(speed / turnRadius) * Time.deltaTime);
         }
-        else
+        else if (angle > 0 && !standing)
         {
             transform.RotateAround(turningCenter, Vector3.up, (speed / turnRadius) * Time.deltaTime);
         }
@@ -243,37 +165,43 @@ public class SteeringWheelcollider : MonoBehaviour
         speedLog = ((transform.position - mLastPosition).magnitude / Time.deltaTime) * 3.6f;
         mLastPosition = transform.position;
 
-        Debug.Log(speedLog);
+        Debug.Log("SensorDataSpeed = " + speed + "Bike Speedlog = " + speedLog + " ..... SensorSpeed without Calculation: " + speedx);
     }
 
+    IEnumerator CompareSpeedSamples()
+    {
+        bool standingStill = true;
+        float time = Time.time;
+        float lastSpeed = speed;
+        while ((Time.time - time) < 0.3f)
+        {
+            if (speed != lastSpeed)
+            {
+                wasinMotion = true;
+                standingStill = false;
+                standing = standingStill;
+                CoroutineRunning = false;
+                break;
+            }
+            lastSpeed = speed;
+            yield return null;
+        }
+        standing = standingStill;
+        if (standing && wasinMotion)
+        {
+            testScript.speed.resetSpeed();
+            wasinMotion = false;
+        }
+        CoroutineRunning = false;
+        yield return null;
 
- //   void Update()
- //   {
- //       if (Input.GetKeyDown(KeyCode.R))
- //       {
- //           transform.position = startPos;
- //       }
- //   }
-
+    }
 
     void ShowVirtualBycicle()
     {
-
-        if (wheelcolliderPhysics)
-        {
-            wheelV.transform.Rotate(VL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-            wheelH.transform.Rotate(HR.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-            Vector3 helpWheelRotation = new Vector3(wheelV.transform.localEulerAngles.x, VL.steerAngle, wheelV.transform.localEulerAngles.z);
-            wheelV.transform.localEulerAngles = helpWheelRotation;
-            Vector3 helpHandlebar = new Vector3(0, VL.steerAngle, wheelV.transform.localEulerAngles.z);
-            handlebar.transform.localEulerAngles = helpHandlebar;
-        }
-        else
-        {
-            Vector3 steeringAngle = new Vector3(0, angle, 0);
-            handlebar.transform.localEulerAngles = steeringAngle;
-            wheelV.transform.localEulerAngles = steeringAngle;
-        }
+        Vector3 steeringAngle = new Vector3(0, angle, 0);
+        handlebar.transform.localEulerAngles = steeringAngle;
+        wheelV.transform.localEulerAngles = steeringAngle;
     }
 
 
@@ -305,10 +233,9 @@ public class SteeringWheelcollider : MonoBehaviour
         }
     }
 #endif
-
-
-
 }
+
+
 
 
 
