@@ -16,7 +16,7 @@ public class test : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		IniFile ini = new IniFile ("C:\\Users\\icuser\\Desktop\\CAVE_UNITY\\Unity_Projects\\Sebastian_K\\FahrradSim\\FahrradSim_002\\FahrradSim002Unity5\\Assets\\Scripts\\FahrradCom.EXE.ini");
+		IniFile ini = new IniFile ("C:\\Users\\icuser\\Desktop\\CAVE_UNITY\\Unity_Projects\\Sebastian_K\\TestProjekte\\TestDisplays\\TestDisplay\\Assets\\Scripts\\FahrradCom.EXE.ini");
 
 		string ip1 = ini.IniReadValue ("TCP", "IP");
 

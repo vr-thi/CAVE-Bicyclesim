@@ -88,8 +88,8 @@ public class BycicleBehaviour : MonoBehaviour
         // The Cave will automaticall distribute the script and run it from all PCs, 
         // to avoid this behaviour we need to check if the executing PC is the Master 
         // Otherwise the Cave will freeze 
-        if (!debugging && GetComponent<NetworkIdentity>().isServer)
-        {
+        //if (!debugging && GetComponent<NetworkIdentity>().isServer)
+        //{
             // take Values from Sensor or from Editor
             angle = (float)Test_ReadData.AngleForMono;
             //angle = angle 1.7f; // smoothing the angle because real input degrees are to rough (I get motion sickness)
@@ -110,20 +110,19 @@ public class BycicleBehaviour : MonoBehaviour
             //Lerp Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
             camera.transform.position = Vector3.Lerp(camera.gameObject.transform.position, camLerpPoint.transform.position, .5f);
             camera.transform.rotation = Quaternion.Lerp(camera.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
-        }
-        else if (debugging)
-        {
+        //}else if (debugging)
+        //{
 
-            angle = angleDebug;
-            speed = speedDebug;
+        //    angle = angleDebug;
+        //    speed = speedDebug;
 
-            if (showBycicle)
-                ShowVirtualBycicle();
+        //    if (showBycicle)
+        //        ShowVirtualBycicle();
 
-            ApplySensorDataToBycicle();
-            camera.transform.position = Vector3.Lerp(camera.gameObject.transform.position, camLerpPoint.transform.position, .5f);
-            camera.transform.rotation = Quaternion.Lerp(camera.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
-        }
+        //    ApplySensorDataToBycicle();
+        //    camera.transform.position = Vector3.Lerp(camera.gameObject.transform.position, camLerpPoint.transform.position, .5f);
+        //    camera.transform.rotation = Quaternion.Lerp(camera.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
+        //}
     }
 
 
