@@ -10,8 +10,6 @@ using UnityEditor;
 
 public class BycicleBehaviour : MonoBehaviour
 {
-
-
     public GameObject wheelV;
     public GameObject wheelH;
     public GameObject handlebar;
@@ -39,7 +37,6 @@ public class BycicleBehaviour : MonoBehaviour
     // measured tire spacing is roughly 109 cm
     private float tirespacing = 1.09f;
 
-    private Vector3 startPos;
     private Vector3 centerofMass;
 
     private float speedLog;
@@ -56,29 +53,11 @@ public class BycicleBehaviour : MonoBehaviour
     {
         dataInput.speed.changeSampleCount(2);
         wasinMotion = false;
-        startPos = transform.position;
 
         // lower the center of mass in order to make the bike more stable 
         centerofMass = this.GetComponent<Rigidbody>().centerOfMass;
         centerofMass.y = -1.5f;
         this.GetComponent<Rigidbody>().centerOfMass = centerofMass;
-
-
-        if (showBycicle)
-        {
-            wheelV.SetActive(true);
-            wheelH.SetActive(true);
-            handlebar.SetActive(true);
-            frame.SetActive(true);
-        }
-        else
-        {
-            wheelV.SetActive(false);
-            wheelH.SetActive(false);
-            handlebar.SetActive(false);
-            frame.SetActive(false);
-        }
-
 
     }
 
@@ -88,56 +67,45 @@ public class BycicleBehaviour : MonoBehaviour
         // The Cave will automaticall distribute the script and run it from all PCs, 
         // to avoid this behaviour we need to check if the executing PC is the Master 
         // Otherwise the Cave will freeze 
-        //if (!debugging && GetComponent<NetworkIdentity>().isServer)
-        //{
+        if (!debugging && GetComponent<NetworkIdentity>().isServer)
+        {
             // take Values from Sensor or from Editor
             angle = (float)Test_ReadData.AngleForMono;
-            //angle = angle 1.7f; // smoothing the angle because real input degrees are to rough (I get motion sickness)
-            speed = (float)Test_ReadData.speedForMono * 50000; // somehow the cave divides the sensor input by aprox. 40000
+            angle = angle * 1.7f; // smoothing the angle because real input degrees are to rough (I get motion sickness)
+
+            speed = (float)Test_ReadData.speedForMono * 50000; // somehow the cave divides the sensor input by aprox. 50000
             float a = 0.6f;
             speed = speed * a + (1 - a) * speedFromLastFrame;
+
             speedFromLastFrame = speed;
-
+        }
+        else if (debugging)
+        {
             // if in Debug Mode, take the Data from inEditorValues
+            angle = angleDebug;
+            speed = speedDebug;
+        }
 
-            ApplySensorDataToBycicle();
+        ApplySensorDataToBycicle();
 
+        //Lerp Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
+        camera.transform.position = Vector3.Lerp(camera.gameObject.transform.position, camLerpPoint.transform.position, .5f);
+        camera.transform.rotation = Quaternion.Lerp(camera.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
 
-            if (showBycicle)
-                ShowVirtualBycicle();
-
-
-            //Lerp Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
-            camera.transform.position = Vector3.Lerp(camera.gameObject.transform.position, camLerpPoint.transform.position, .5f);
-            camera.transform.rotation = Quaternion.Lerp(camera.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
-        //}else if (debugging)
-        //{
-
-        //    angle = angleDebug;
-        //    speed = speedDebug;
-
-        //    if (showBycicle)
-        //        ShowVirtualBycicle();
-
-        //    ApplySensorDataToBycicle();
-        //    camera.transform.position = Vector3.Lerp(camera.gameObject.transform.position, camLerpPoint.transform.position, .5f);
-        //    camera.transform.rotation = Quaternion.Lerp(camera.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
-        //}
+        ShowVirtualBycicle();
     }
 
 
     void ApplySensorDataToBycicle()
     {
-
-        float speedx = speed;
         speed *= (30 / 1.88f);
 
         //check if Breaking
         if (!debugging && !CoroutineRunning)
-        {
-            StartCoroutine(CompareSpeedSamples());
-            CoroutineRunning = true;
-        }
+            {
+                StartCoroutine(CompareSpeedSamples());
+                CoroutineRunning = true;
+            }
 
 
         Vector3 turningCenter;
@@ -146,11 +114,6 @@ public class BycicleBehaviour : MonoBehaviour
         turnRadius = tirespacing / Mathf.Sin(Mathf.Abs(angle) * Mathf.Deg2Rad);
         // find the Middle of the turning circle 
         turningCenter = (transform.position + (transform.right.normalized * turnRadius));
-
-        //if (testScript.speed.getSampleCount() < 9)
-        //{
-        //    testScript.speed.increaseSampleCount();
-        //}
 
 
         if (angle <= 0 && !standing)
@@ -172,6 +135,10 @@ public class BycicleBehaviour : MonoBehaviour
 
         //Debug.Log("SensorDataSpeed = " + speed + "Bike Speedlog = " + speedLog + " ..... SensorSpeed without Calculation: " + speedx);
     }
+
+
+
+
 
     IEnumerator CompareSpeedSamples()
     {
@@ -200,14 +167,24 @@ public class BycicleBehaviour : MonoBehaviour
         }
         CoroutineRunning = false;
         yield return null;
-
     }
+
+
+
 
     void ShowVirtualBycicle()
     {
-        Vector3 steeringAngle = new Vector3(0, angle, 0);
-        handlebar.transform.localEulerAngles = steeringAngle;
-        wheelV.transform.localEulerAngles = steeringAngle;
+        handlebar.SetActive(showBycicle);
+        frame.SetActive(showBycicle);
+        wheelV.SetActive(showBycicle);
+        wheelH.SetActive(showBycicle);
+
+        if (showBycicle)
+        {
+            Vector3 steeringAngle = new Vector3(0, angle, 0);
+            handlebar.transform.localEulerAngles = steeringAngle;
+            wheelV.transform.localEulerAngles = steeringAngle;
+        }
     }
 
 
