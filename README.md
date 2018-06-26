@@ -2,17 +2,17 @@
 Bicycle simulator for CAVE
 
 
-Assets: 
+## Assets: 
 
-Buildings: 
+# Buildings: 
 The buildings in the scene come from the cadnav marketplace. 
 All 3DModels are free and were converted with the tool 3DS Max into Unity compatible formats. 
 
 The following list contains a few extra buildings which are not used in the scene, but fit the artstyle: 
 
-Old Russian commercial district building 3D Model
+- Old Russian commercial district building 3D Model
 http://www.cadnav.com/3d-models/model-34138.html
-Terraced house 3D Model
+- Terraced house 3D Model
 http://www.cadnav.com/3d-models/model-30966.html
 Vintage terraced house 3D Model
 http://www.cadnav.com/3d-models/model-30981.html
@@ -41,7 +41,7 @@ Apartment block 3D Model
 http://www.cadnav.com/3d-models/model-8525.
 
 
-Unity Asset Store 
+# Unity Asset Store 
 
 Trees: 
 https://assetstore.unity.com/packages/3d/vegetation/trees/realistic-tree-9-rainbow-tree-54622
