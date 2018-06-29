@@ -52,3 +52,25 @@ https://assetstore.unity.com/packages/3d/environments/urban/low-poly-street-pack
 - Materials: 
 https://assetstore.unity.com/packages/2d/textures-materials/roads/yughues-free-pavement-materials-12952
 
+
+
+## Working with the Cave - common guidelines and rules
+
+- First of all read the CaveWiki and it's quick start guide. This guide provides additional informations, which are sometimes generic cave issues and sometimes project specific. 
+
+
+#### Naming the build folder 
+- The BuildFolder (which contains the Builded project) needs to have the same name as your build.exe. In this Case the Buildfolder is Called: **"FahrradSim"** and the contained .exe is called **"FahrradSim.exe"**. 
+
+
+
+#### dont use void FixedUpdate() 
+- The method **FixedUpdate()** is not called by the cave, therefore always use **Update()** even for physics calculations
+
+
+
+#### Add a NetworkIdentity component to Objects if you want to manipulate the physics
+
+
+
+
