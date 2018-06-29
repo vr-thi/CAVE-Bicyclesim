@@ -70,6 +70,24 @@ https://assetstore.unity.com/packages/2d/textures-materials/roads/yughues-free-p
 
 
 #### Add a NetworkIdentity component to Objects if you want to manipulate the physics
+- The NetworkIdentityComponent must be part of the Bycicle component, otherwise the changes of the position will not be synced between the master and the slave PCs. 
+*add picture of network Identity component*
+
+
+#### Sync the position of the cave camera with the bycicle position 
+- In order to sync the cave camera with the position of the bycicle it is necessary to connect the transform of the instantiated cave camera with the bycicle. This is done with the Cave Prefab **"NodeManager"** (which is always part of a cave Unity scene). 
+- Within the NodeManager find the component **"Instantiate Node"** and add the "Cycle Transform" in the public editor field **"Origin Parent"**
+*add Image of Instantia Node Component*
+
+
+
+#### Run the bycicle physics calculation script only on the Master-PC
+- the CaveUnity Framework is designed to share physics calculations between the master and it's slave automated. 
+Therefore the physics calculations scripts must only be executed on the Master-PC. 
+- The code line to find the Master-PC is: </br> **if (GetComponent**\<**NetworkIdentity**\>**().isServer)) {**</br>
+  &nbsp; &nbsp; &nbsp; &nbsp;  *place physics calculations here* </br>
+  }  
+
 
 
 
