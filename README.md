@@ -89,6 +89,26 @@ Therefore the physics calculations scripts must only be executed on the Master-P
   }  
 
 
+#### Changing the Cave camera position in relation to the Bycicle
+- if the (realworld) bycicle is positioned different within the cave or the relation between the bycicle prefab components is changed, it is necessary to reposition the Cave camera. 
+- In order to get a virtual represantion of the real bycicle, activate the public editor tick box **showBycicle**  
+- A simple Cube and Sphre Represantation of the Bycicle will be rendered in the CavePlaymode. 
+- This representation is close toward the real measurements of the Bycicle. 
+- You can check if virtual and real world Models align. 
+- if not, change the (x,y,z) position of the cave camera in the **"node-config.xml"** </br> *(Unityproject > Assets > Streaming Assets > node.conig.xml)*
+- *add Image node-config*
 
+
+## FahrradSim Unity-Project Guide
+
+
+#### Receiving data from the Bycicle
+- Plug in the Poweradapter of the Cycle 
+- Connect the LAn cable with the PC
+- Flick the ON / Off switch at the Pollin A/D changer.
+- Debugging: Use the Pollin **"NetServer.exe"**, to check if the Cycle is sending Data. </br>
+*"C:\Users\icuser\Desktop\CAVE_UNITY\Unity_Projects\Sebastian_K\FahrradSim\avr-net-io\Pollin-Server\NetServer.exe"*
+- All Scripts concerned with the data transmission are in the Folder: *Assets > Scripts > TCP* 
+- The GameObject TCP-Datastream is placed in the Scene and holds the Script: **TCP-Stream**
 
 
