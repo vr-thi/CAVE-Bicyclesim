@@ -1,5 +1,5 @@
-# CAVE-Bicyclesim
-Bicycle simulator for CAVE
+# CAVE-Byciclesim
+Bycicle simulator for CAVE
 
 
 ## Assets: 
