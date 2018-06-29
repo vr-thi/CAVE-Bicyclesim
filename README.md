@@ -56,17 +56,16 @@ https://assetstore.unity.com/packages/2d/textures-materials/roads/yughues-free-p
 
 ## Working with the Cave - common guidelines and rules
 
-- First of all read the CaveWiki and it's quick start guide. This guide provides additional informations, which are sometimes generic cave issues and sometimes project specific. 
+- First of all read the CaveWiki and it's quick start guide. </br>
+The following guide provides additional informations, which are sometimes generic cave issues and sometimes project specific. 
 
 
 #### Naming the build folder 
 - The BuildFolder (which contains the Builded project) needs to have the same name as your build.exe. In this Case the Buildfolder is Called: **"FahrradSim"** and the contained .exe is called **"FahrradSim.exe"**. 
 
 
-
 #### dont use void FixedUpdate() 
 - The method **FixedUpdate()** is not called by the cave, therefore always use **Update()** even for physics calculations
-
 
 
 #### Add a NetworkIdentity component to Objects if you want to manipulate the physics
@@ -78,7 +77,6 @@ https://assetstore.unity.com/packages/2d/textures-materials/roads/yughues-free-p
 - In order to sync the cave camera with the position of the bycicle it is necessary to connect the transform of the instantiated cave camera with the bycicle. This is done with the Cave Prefab **"NodeManager"** (which is always part of a cave Unity scene). 
 - Within the NodeManager find the component **"Instantiate Node"** and add the "Cycle Transform" in the public editor field **"Origin Parent"**
 *add Image of Instantia Node Component*
-
 
 
 #### Run the bycicle physics calculation script only on the Master-PC
@@ -99,10 +97,14 @@ Therefore the physics calculations scripts must only be executed on the Master-P
 - *add Image node-config*
 
 
+
+
 ## FahrradSim Unity-Project Guide
 
 
-#### Receiving data from the Bycicle
+#### Setup the bycicle and receive data from the bycicle
+- Layout the 150cm x 60cm Balck rubber mat in the center of the cave, with one end lining up with the entrance border. 
+- Position the bycicle on top
 - Plug in the Poweradapter of the Cycle 
 - Connect the LAN cable with the PC
 - Flick the ON / Off switch at the Pollin A/D changer.
