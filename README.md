@@ -104,11 +104,21 @@ Therefore the physics calculations scripts must only be executed on the Master-P
 
 #### Receiving data from the Bycicle
 - Plug in the Poweradapter of the Cycle 
-- Connect the LAn cable with the PC
+- Connect the LAN cable with the PC
 - Flick the ON / Off switch at the Pollin A/D changer.
 - Debugging: Use the Pollin **"NetServer.exe"**, to check if the Cycle is sending Data. </br>
 *"C:\Users\icuser\Desktop\CAVE_UNITY\Unity_Projects\Sebastian_K\FahrradSim\avr-net-io\Pollin-Server\NetServer.exe"*
+
+</br>
+
 - All Scripts concerned with the data transmission are in the Folder: *Assets > Scripts > TCP* 
 - The GameObject TCP-Datastream is placed in the Scene and holds the Script: **TCP-Stream**
 
 
+#### Applying the data to the InGame bycicle 
+- Script: **BycicleBehaviour**
+- The Angle and Speed are collected from the TCP-Stream-Script by: </br>
+*angle = (float)Test_ReadData.AngleForMono;* </br>
+*speed = (float)Test_ReadData.speedForMono;*
+- The angle and speed are applied with the Unity Method: </br> 
+*public void RotateAround(Vector3 point, Vector3 axis, float angle);*
