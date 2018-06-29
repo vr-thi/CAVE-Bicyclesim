@@ -15,10 +15,13 @@ public class BycicleBehaviour : MonoBehaviour
     public GameObject handlebar;
     public GameObject frame;
 
+
+    // The CameraHolder
     public GameObject camera;
+    // The point towards which the Camera is Lerped in the Update Method
     public GameObject camLerpPoint;
 
-    public test dataInput;
+    public TCP_Stream dataInput;
 
     public bool showBycicle;
     public bool debugging;
@@ -71,19 +74,25 @@ public class BycicleBehaviour : MonoBehaviour
         {
             // take Values from Sensor or from Editor
             angle = (float)Test_ReadData.AngleForMono;
-            angle = angle * 1.7f; // smoothing the angle because real input degrees are to rough (I get motion sickness)
+            //angle = angle / 1.7f; // smoothing the angle because real input degrees are to rough (I get motion sickness)
 
             speed = (float)Test_ReadData.speedForMono * 50000; // somehow the cave divides the sensor input by aprox. 50000
-            float a = 0.6f;
-            speed = speed * a + (1 - a) * speedFromLastFrame;
+            //float a = 0.6f;
+            //speed = speed * a + (1 - a) * speedFromLastFrame;
 
-            speedFromLastFrame = speed;
+
+            //if (!standing && speed != speedFromLastFrame)
+            //{
+            //    dataInput.speed.increaseSampleCount();
+            //}
+            //speedFromLastFrame = speed;
         }
         else if (debugging)
         {
             // if in Debug Mode, take the Data from inEditorValues
             angle = angleDebug;
             speed = speedDebug;
+
         }
 
         ApplySensorDataToBycicle();
@@ -91,6 +100,7 @@ public class BycicleBehaviour : MonoBehaviour
         //Lerp Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
         camera.transform.position = Vector3.Lerp(camera.gameObject.transform.position, camLerpPoint.transform.position, .5f);
         camera.transform.rotation = Quaternion.Lerp(camera.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
+
 
         ShowVirtualBycicle();
     }
@@ -102,11 +112,10 @@ public class BycicleBehaviour : MonoBehaviour
 
         //check if Breaking
         if (!debugging && !CoroutineRunning)
-            {
-                StartCoroutine(CompareSpeedSamples());
-                CoroutineRunning = true;
-            }
-
+        {
+            StartCoroutine(CompareSpeedSamples());
+            CoroutineRunning = true;
+        }
 
         Vector3 turningCenter;
         float turnRadius;
@@ -136,16 +145,12 @@ public class BycicleBehaviour : MonoBehaviour
         //Debug.Log("SensorDataSpeed = " + speed + "Bike Speedlog = " + speedLog + " ..... SensorSpeed without Calculation: " + speedx);
     }
 
-
-
-
-
     IEnumerator CompareSpeedSamples()
     {
         bool standingStill = true;
         float time = Time.time;
         float lastSpeed = speed;
-        while ((Time.time - time) < 0.3f)
+        while ((Time.time - time) < 0.4f)
         {
             if (speed != lastSpeed)
             {
