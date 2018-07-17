@@ -70,15 +70,17 @@ The following guide provides additional informations, which are sometimes generi
 
 #### Add a NetworkIdentity component to Objects if you want to manipulate the physics
 - The NetworkIdentityComponent must be part of the Bycicle component, otherwise the changes of the position will not be synced between the master and the slave PCs. 
-![alt text]( CAVE-Bicyclesim/ReadmeAssets/NodeManager.PNG )
 
-*add picture of network Identity component*
+![NetworkIdentity_IMG](https://raw.githubusercontent.com/vr-thi/CAVE-Bicyclesim/master/ReadmeAssets/NetworkIdentityPNG.PNG)
+
 
 
 #### Sync the position of the cave camera with the bycicle position 
 - In order to sync the cave camera with the position of the bycicle it is necessary to connect the transform of the instantiated cave camera with the bycicle. This is done with the Cave Prefab **"NodeManager"** (which is always part of a cave Unity scene). 
 - Within the NodeManager find the component **"Instantiate Node"** and add the "Cycle Transform" in the public editor field **"Origin Parent"**
-*add Image of Instantia Node Component*
+
+![NodeManager_IMG](https://raw.githubusercontent.com/vr-thi/CAVE-Bicyclesim/master/ReadmeAssets/NodeManager.PNG)
+
 
 
 #### Run the bycicle physics calculation script only on the Master-PC
@@ -96,7 +98,8 @@ Therefore the physics calculations scripts must only be executed on the Master-P
 - This representation is close toward the real measurements of the Bycicle. 
 - You can check if virtual and real world Models align. 
 - if not, change the (x,y,z) position of the cave camera in the **"node-config.xml"** </br> *(Unityproject > Assets > Streaming Assets > node.conig.xml)*
-- *add Image node-config*
+
+![Node.Config.XML_IMG](https://raw.githubusercontent.com/vr-thi/CAVE-Bicyclesim/master/ReadmeAssets/node-config.PNG)
 
 
 
