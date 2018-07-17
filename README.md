@@ -70,6 +70,8 @@ The following guide provides additional informations, which are sometimes generi
 
 #### Add a NetworkIdentity component to Objects if you want to manipulate the physics
 - The NetworkIdentityComponent must be part of the Bycicle component, otherwise the changes of the position will not be synced between the master and the slave PCs. 
+![alt text]( CAVE-Bicyclesim/ReadmeAssets/NodeManager.PNG )
+
 *add picture of network Identity component*
 
 
