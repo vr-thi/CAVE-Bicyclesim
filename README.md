@@ -138,7 +138,7 @@ Therefore the physics calculations scripts must only be executed on the Master-P
 - In the Tool go to: File --> Open Project -->  select the Build Folder
 - Go to Settings --> deselect Autostart on Master-PC
 
-![DeployTool_IMG](https://raw.githubusercontent.com/vr-thi/CAVE-Bicyclesim/master/ReadmeAssets/ConfigTool.png
+![DeployTool_IMG](https://raw.githubusercontent.com/vr-thi/CAVE-Bicyclesim/master/ReadmeAssets/ConfigTool.png)
 
 - Click Deploy in the Config Tool
 - Click Start in the Tool 
