@@ -29,10 +29,6 @@ public class Speed {
 		this.fWheelLine = wheelLine;
 		this.fSensorTime = new long[this.fSample];
 	}
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     /**
 	 * Set current time of sensor.
@@ -41,12 +37,12 @@ public class Speed {
 	 */
     public void setSensorTime(long aSensorTime) {
         //Debug.Log ("called");
-        if (this.fCnt <= 2) {
-            this.fSensorTime[this.fCnt] = aSensorTime;
-            this.fCnt++;
-            Debug.Log(this.fCnt);
-        }
-        else if (this.fCnt > 2 && this.fCnt < this.fSample)
+        //if (this.fCnt <= 2) {
+        //    this.fSensorTime[this.fCnt] = aSensorTime;
+        //    this.fCnt++;
+            
+        //}
+        if (this.fCnt < this.fSample)
         {
             this.fSensorTime[this.fCnt] = aSensorTime;
             this.fCnt++;
@@ -56,8 +52,8 @@ public class Speed {
 			//wenn ZeitenVektor voll ist
 			this.shiftTime(aSensorTime);
 			this.averTimeDiff();
-		}		
-	}
+		}
+    }
 
 	/**
 	 * Shift values of sensors' times.

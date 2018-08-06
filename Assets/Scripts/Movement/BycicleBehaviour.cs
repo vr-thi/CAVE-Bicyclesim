@@ -10,107 +10,167 @@ using UnityEditor;
 
 public class BycicleBehaviour : MonoBehaviour
 {
+
+    //These gameObjects represent the inGame bycicle, which is activated with the bool "showbycicle"
+    //this inGame bycicle can also be used to align the real cycle with the 3D-model inside of the cave
     public GameObject wheelV;
     public GameObject wheelH;
     public GameObject handlebar;
     public GameObject frame;
 
 
-    // The CameraHolder
-    public GameObject camera;
-    // The point towards which the Camera is Lerped in the Update Method
+    [Tooltip("The Node Manager Prefab of the Cave")]
+    public GameObject nodeManager;
+    [Tooltip("The default Unity Camera, which is active in Debug mode")]
+    public GameObject defaultCamera;
+    [Tooltip("The CameraHolder")]
+    public GameObject camerHolder;
+    [Tooltip("The point towards which the Camera is Lerped in the Update Method")]
     public GameObject camLerpPoint;
-
+    [Tooltip("Connection to the bycicle TCP_Stream")]
     public TCP_Stream dataInput;
+    [Tooltip("The script, which handles and smoothes the raw sensor data")]
+    public InputHandling inputHandling;
 
+
+    //For Debugging
+    [Tooltip("if the 3D-models of the cycle should be rendered")]
     public bool showBycicle;
+    [Tooltip("if in debug mode, or in Cave mode")]
     public bool debugging;
-
-
-    private float speed;
-    private float speedFromLastFrame = 0;
-    private float angle;
-
+    [Tooltip("The steerAngle from -40° to 40°")]
     [Range(-40.0f, 40.0f)]
     public float angleDebug = 21f;
+    [Tooltip("The speed from 0 to 30 km/h")]
     [Range(0f, 30f)]
     public float speedDebug = 0f;
 
 
+    [Tooltip("angle, which gets input from the TCP stream ")]
+    [HideInInspector]
+    public float angle;
+    [Tooltip("speed, which gets input from TCP stream")]
+    private float speed;
+
+
+    [Tooltip("If the Cycle should tilt while driving a corner")]
+    public bool tiltCycle;
+    [Tooltip("The Intensity: 1 = realistic Tilt, Anything larger decreases the amount ")]
+    public float smoothIntensityTilt;
+    // the amount of which the Cycle tilts in corners
+    private float tilt;
+    // the amount from last frame, to smooth the tiltOverTime
+    private float tiltFromLastFrame = 0;
+    // the angles of the calculated tilt in relation to the Cycle
+    private Vector3 tiltAngles;
+
+
     // measured tire spacing is roughly 109 cm
     private float tirespacing = 1.09f;
-
+    //center of mass of the Cycle
     private Vector3 centerofMass;
-
-    private float speedLog;
+    // if the cycle was moving in the last frame 
     private bool wasinMotion;
+    // if the Cycle is standing at the moment
+    private bool standing;
+    // if the Coroutine is currently runnung
+    private bool CoroutineRunning = false;
 
-    bool standing;
-    bool CoroutineRunning = false;
 
-    Vector3 mLastPosition = Vector3.zero;
+    // Enable / Disable various Components to enable debugging without the cave 
+    private void Awake()
+    {
+        if (debugging)
+        {
+            defaultCamera.SetActive(true);
+            nodeManager.SetActive(false);
+        }
+        else
+        {
+            defaultCamera.SetActive(false);
+            nodeManager.SetActive(true);
+        }
+    }
 
 
-    // Use this for initialization
     void Start()
     {
+        // Sets the sampleCount = 2;  --> normal Sample count is 7 - 9
+        // With only 2 samples the cycle starts quicker
+        // the sample count gets increased after the initial movement to the maxSampleCount 
+        // and reset to 2 every time the cycle comes to a halt
+        // --> this happens in the script Speed.cs in Method: SetSensorTime(long aSensorTime)
         dataInput.speed.changeSampleCount(2);
+        
+        // Cycle didnt move yet
         wasinMotion = false;
 
         // lower the center of mass in order to make the bike more stable 
         centerofMass = this.GetComponent<Rigidbody>().centerOfMass;
         centerofMass.y = -1.5f;
         this.GetComponent<Rigidbody>().centerOfMass = centerofMass;
-
     }
 
+
+
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         // The Cave will automaticall distribute the script and run it from all PCs, 
         // to avoid this behaviour we need to check if the executing PC is the Master 
         // Otherwise the Cave will freeze 
         if (!debugging && GetComponent<NetworkIdentity>().isServer)
         {
-            // take Values from Sensor or from Editor
+            // take steeringAngle from sensor
             angle = (float)Test_ReadData.AngleForMono;
-            //angle = angle / 1.7f; // smoothing the angle because real input degrees are to rough (I get motion sickness)
-
-            speed = (float)Test_ReadData.speedForMono * 50000; // somehow the cave divides the sensor input by aprox. 50000
-            //float a = 0.6f;
-            //speed = speed * a + (1 - a) * speedFromLastFrame;
 
 
-            //if (!standing && speed != speedFromLastFrame)
-            //{
-            //    dataInput.speed.increaseSampleCount();
-            //}
-            //speedFromLastFrame = speed;
+            //smoothing the angle in 3 steps
+
+            // 1. smoothing the angle amplitude over all because real input degrees are to rough... (I get motion sickness)
+            angle = angle / 1.7f; 
+            // 2. Smooth the angle over time with an  average of the array of the rawSensorinput
+            if (inputHandling.smoothRawSteerAngle)
+                angle = inputHandling.SmoothRawAngle(angle);
+            // 3. Decrease the amplitude at the center of Steering (to decrease Jiggle)
+            if (inputHandling.smoothSteerAngleAtCenter)
+                angle = inputHandling.SmoothSteerAngleAtCenter(angle);
+
+            // somehow the sensor Input gets decreased by aprox. 50000 if connected to the cave
+            speed = (float)Test_ReadData.speedForMono * 50000; 
+            // One step to smooth the speed (same as SmoothRawAngle)
+            if (inputHandling.smoothRawSpeed)
+                speed = inputHandling.SmoothRawSpeed(speed);
         }
+
+        // if in Debug Mode, take the Data from inEditorValues
         else if (debugging)
         {
-            // if in Debug Mode, take the Data from inEditorValues
             angle = angleDebug;
             speed = speedDebug;
-
         }
 
+        // Apply the data to the ingame Cycle
         ApplySensorDataToBycicle();
 
-        //Lerp Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
-        camera.transform.position = Vector3.Lerp(camera.gameObject.transform.position, camLerpPoint.transform.position, .5f);
-        camera.transform.rotation = Quaternion.Lerp(camera.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
+        //Lerp the Debug Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
+        camerHolder.transform.position = Vector3.Lerp(camerHolder.gameObject.transform.position, camLerpPoint.transform.position, .5f);
+        camerHolder.transform.rotation = Quaternion.Lerp(camerHolder.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
 
-
+        // if the cylce is shown, various gameObjects are set active, or inactive
         ShowVirtualBycicle();
     }
 
 
+
     void ApplySensorDataToBycicle()
     {
+        float originalSpeed = speed;
         speed *= (30 / 1.88f);
 
-        //check if Breaking
+        // check if Breaking
+        // not a clean solution, but it works 
+        // a Coroutine is started every 0.4s, if during this time period the sensor input doesnt return any change in the speed, the cycle is standing still.
         if (!debugging && !CoroutineRunning)
         {
             StartCoroutine(CompareSpeedSamples());
@@ -124,27 +184,41 @@ public class BycicleBehaviour : MonoBehaviour
         // find the Middle of the turning circle 
         turningCenter = (transform.position + (transform.right.normalized * turnRadius));
 
-
+        // distinguish between heading left or right
         if (angle <= 0 && !standing)
         {
+            // if the angle is negativ (steering left) the turning center is flipped to the left side
             Vector3 curDirection = turningCenter - transform.position;
             turningCenter = transform.position - curDirection;
+            // rotate the Cycle around the turningCenter with the given speed
             transform.RotateAround(turningCenter, Vector3.up, -(speed / turnRadius) * Time.deltaTime);
+
+            // you can try tilting but for me it made motion sickness occur stronger
+            if (tiltCycle)
+            {
+                tilt = CalculateTilt(originalSpeed, turnRadius);
+                tiltAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, -tilt);
+                tiltAngles.z = -tiltAngles.z;
+                transform.eulerAngles = tiltAngles;
+            }
         }
         else if (angle > 0 && !standing)
         {
+            // rotate the Cycle around the turningCenter with the given speed
             transform.RotateAround(turningCenter, Vector3.up, (speed / turnRadius) * Time.deltaTime);
+
+            // you can try tilting but for me it made motion sickness occur stronger
+            if (tiltCycle)
+            {
+                tilt = CalculateTilt(originalSpeed, turnRadius);
+                tiltAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, -tilt);
+                transform.eulerAngles = tiltAngles;
+            }
         }
-
-
-
-
-        speedLog = ((transform.position - mLastPosition).magnitude / Time.deltaTime) * 3.6f;
-        mLastPosition = transform.position;
-
-        //Debug.Log("SensorDataSpeed = " + speed + "Bike Speedlog = " + speedLog + " ..... SensorSpeed without Calculation: " + speedx);
     }
 
+
+    //checking if the cycle is standing still
     IEnumerator CompareSpeedSamples()
     {
         bool standingStill = true;
@@ -152,6 +226,7 @@ public class BycicleBehaviour : MonoBehaviour
         float lastSpeed = speed;
         while ((Time.time - time) < 0.4f)
         {
+            // if the speedSamples are different once, the cycle is still moving and therefore the coroutine is stopped
             if (speed != lastSpeed)
             {
                 wasinMotion = true;
@@ -163,10 +238,13 @@ public class BycicleBehaviour : MonoBehaviour
             lastSpeed = speed;
             yield return null;
         }
+        // standing is only true if the while loop didnt catch a single differing speedsample
         standing = standingStill;
         if (standing && wasinMotion)
         {
+            // the speed Array is flushed
             dataInput.speed.resetSpeed();
+            //sampleCount is set to 2 (like in start)
             dataInput.speed.changeSampleCount(2);
             wasinMotion = false;
         }
@@ -176,7 +254,23 @@ public class BycicleBehaviour : MonoBehaviour
 
 
 
+    private float CalculateTilt(float v, float r)
+    {
+        // formula to caluclate the tile (taken from motorcycle)
+        float tiltAngle = (v * v) / (r * 9.81f);
+        // smoothing the tilt with the tiltFromLastFrame
+        float a = 0.5f;
+        tiltAngle = tiltAngle * a + (1 - a) * tiltFromLastFrame;
+        tiltFromLastFrame = tiltAngle;
 
+        // intensity can be controlled with the public int smoothIntensityTilt
+        if (smoothIntensityTilt == 0)
+            return tiltAngle;
+        else
+            return tiltAngle / smoothIntensityTilt;
+    }
+
+       //activate / deactivate various components
     void ShowVirtualBycicle()
     {
         handlebar.SetActive(showBycicle);
@@ -194,7 +288,7 @@ public class BycicleBehaviour : MonoBehaviour
 
 
     // Draw The Expected turningcircle in Editor (according to the wheelspacing of given bike)  
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
 
@@ -220,7 +314,7 @@ public class BycicleBehaviour : MonoBehaviour
             Gizmos.DrawWireSphere(turningCenter, turnRadius);
         }
     }
-#endif
+    #endif
 }
 
 

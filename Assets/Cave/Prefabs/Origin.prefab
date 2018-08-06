@@ -129,7 +129,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4072261932558436
 Transform:
   m_ObjectHideFlags: 1
@@ -244,7 +244,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 100000
+  far clip plane: 300
   field of view: 60
   orthographic: 0
   orthographic size: 5

@@ -4,14 +4,14 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 12
-  productGUID: 1f16cb772a7930a4697792dbdf2055a0
+  productGUID: 75f3535865782f94bbf1ebbf4a95d4cf
   AndroidProfiler: 0
   defaultScreenOrientation: 4
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: TestDisplay
+  productName: TestScreenPositions
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -508,14 +508,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: TestDisplay
+  metroPackageName: TestScreenPositions
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: TestDisplay
+  metroApplicationDescription: TestScreenPositions
   wsaImages: {}
   metroTileShortName: 
   metroCommandLineArgsFile: 
@@ -590,8 +590,8 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: 8e2f3f3d-c55e-4ce5-a881-382462f8c620
-  projectName: TestDisplay
+  cloudProjectId: 97f19048-b4c3-4697-889c-9769a14ebb01
+  projectName: TestScreenPositions
   organizationId: cluesolo
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
