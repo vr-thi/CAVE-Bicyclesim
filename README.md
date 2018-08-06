@@ -131,3 +131,14 @@ Therefore the physics calculations scripts must only be executed on the Master-P
 *speed = (float)Test_ReadData.speedForMono;*
 - The angle and speed are applied with the Unity Method: </br> 
 *public void RotateAround(Vector3 point, Vector3 axis, float angle);*
+
+#### Running the Build
+- Start Unity and open the project
+- Start the **"Unity Deploy and Config Tool"** 
+- In the Tool go to: File --> Open Project -->  select the Build Folder
+- Go to Settings --> deselect Autostart on Master-PC
+- Click Deploy in the Config Tool
+- Click Start in the Tool 
+- Click run in Unity 
+
+
