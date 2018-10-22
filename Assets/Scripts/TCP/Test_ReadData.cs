@@ -29,7 +29,7 @@ public class Test_ReadData {
 
 	public void StartThread() {
 		stopThread = false; 
-		bool sensor;
+		bool sensor = false;
 		bool allowSpeedReset = true;
 		DateTime dt = DateTime.Now;
 		long resetSpeedStart = dt.Ticks;
@@ -37,7 +37,7 @@ public class Test_ReadData {
 		double currWinkel;   	  
 		double lastWinkel = -1000.0;
 		Debug.Log("WORKER INSIDE");
-		sensor = false;
+
 		while (!stopThread) {
 
 			// ****************************************
@@ -60,13 +60,17 @@ public class Test_ReadData {
 			// Geschwindigkeit
 			//*****************************************
 			if (rnd.getValue(CONST.getSPEED()).Length > 0) {
-				val = Int32.Parse(rnd.getValue(CONST.getSPEED()));
+                
 
-				if (val < this.fGrenze && sensor == false) {
+                val = Int32.Parse(rnd.getValue(CONST.getSPEED()));
+               // Debug.Log("string: " + rnd.getValue(CONST.getSPEED()) + " parsed: " + val);
+
+
+                if (val < this.fGrenze && sensor == false) {
 					sensor = true;
 					speed.setSensorTime(rnd.getDate(CONST.getSPEED()));
 					speedForMono = speed.getSpeed ();
-					//Debug.Log("Speed m/s\n" + speed.getSpeed().ToString());
+					//Debug.Log("Speed m/s " + speedForMono.ToString());
 
 					resetSpeedStart = rnd.getDate(CONST.getSPEED());
 					allowSpeedReset = true;

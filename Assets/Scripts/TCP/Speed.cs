@@ -73,7 +73,8 @@ public class Speed {
 		int sum = 0;
 
 		for (int i=0; i<this.fSample-1; i++) {
-			//Summe von Zeitdifferenzen zwischen nacheinander kommenden Sensorzeiten
+            //Summe von Zeitdifferenzen zwischen nacheinander kommenden Sensorzeiten
+            //Debug.Log("diffTime: " + (int)(this.fSensorTime[i + 1] - this.fSensorTime[i]));
 			sum += (int)(this.fSensorTime[i+1] - this.fSensorTime[i]);
 		}
 
@@ -91,7 +92,9 @@ public class Speed {
 		if (this.fSpeedAvailable) {
 			//Radumfang des Rades ist durch Anzahl von Sensoren geteilt
 			//Millisekunden muss man in Sekunden uwandeln
-			return (this.fWheelLine/this.fSensorCnt) / (this.fAverTimeDiff/1000);
+            double temp = (this.fWheelLine / this.fSensorCnt) / (this.fAverTimeDiff / Mathf.Pow(10,7));
+            //Debug.Log("res: " + temp + ", fAverTimeDiff: " + fAverTimeDiff + ", fAverTimeDiff/10^7: " + fAverTimeDiff / Mathf.Pow(10, 7));
+            return temp;
 		} else {
 			return 0;
 		}

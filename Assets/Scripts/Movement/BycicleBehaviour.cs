@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.Networking;
+using Cave; 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -19,6 +20,7 @@ public class BycicleBehaviour : MonoBehaviour
     public GameObject frame;
 
 
+
     [Tooltip("The Node Manager Prefab of the Cave")]
     public GameObject nodeManager;
     [Tooltip("The default Unity Camera, which is active in Debug mode")]
@@ -27,17 +29,17 @@ public class BycicleBehaviour : MonoBehaviour
     public GameObject camerHolder;
     [Tooltip("The point towards which the Camera is Lerped in the Update Method")]
     public GameObject camLerpPoint;
-    [Tooltip("Connection to the bycicle TCP_Stream")]
-    public TCP_Stream dataInput;
+   // [Tooltip("Connection to the bycicle TCP_Stream")]
+    
     [Tooltip("The script, which handles and smoothes the raw sensor data")]
     public InputHandling inputHandling;
 
 
     //For Debugging
-    [Tooltip("if the 3D-models of the cycle should be rendered")]
-    public bool showBycicle;
-    [Tooltip("if in debug mode, or in Cave mode")]
-    public bool debugging;
+    //[Tooltip("if the 3D-models of the cycle should be rendered")]
+    //public bool showBycicle;
+    //[Tooltip("if in debug mode, or in Cave mode")]
+    //public bool debugging;
     [Tooltip("The steerAngle from -40° to 40°")]
     [Range(-40.0f, 40.0f)]
     public float angleDebug = 21f;
@@ -57,6 +59,9 @@ public class BycicleBehaviour : MonoBehaviour
     public bool tiltCycle;
     [Tooltip("The Intensity: 1 = realistic Tilt, Anything larger decreases the amount ")]
     public float smoothIntensityTilt;
+
+    public Controller controller; 
+
     // the amount of which the Cycle tilts in corners
     private float tilt;
     // the amount from last frame, to smooth the tiltOverTime
@@ -64,6 +69,7 @@ public class BycicleBehaviour : MonoBehaviour
     // the angles of the calculated tilt in relation to the Cycle
     private Vector3 tiltAngles;
 
+    private TCP_Stream dataInput;
 
     // measured tire spacing is roughly 109 cm
     private float tirespacing = 1.09f;
@@ -76,11 +82,16 @@ public class BycicleBehaviour : MonoBehaviour
     // if the Coroutine is currently runnung
     private bool CoroutineRunning = false;
 
+    Vector3 posLastFrame;
+
+    int framecounter;
+    float timer; 
+
 
     // Enable / Disable various Components to enable debugging without the cave 
     private void Awake()
     {
-        if (debugging)
+        if (controller.debugging)
         {
             defaultCamera.SetActive(true);
             nodeManager.SetActive(false);
@@ -93,14 +104,20 @@ public class BycicleBehaviour : MonoBehaviour
     }
 
 
+
     void Start()
     {
+        posLastFrame = Vector3.zero;
         // Sets the sampleCount = 2;  --> normal Sample count is 7 - 9
         // With only 2 samples the cycle starts quicker
         // the sample count gets increased after the initial movement to the maxSampleCount 
         // and reset to 2 every time the cycle comes to a halt
         // --> this happens in the script Speed.cs in Method: SetSensorTime(long aSensorTime)
-        dataInput.speed.changeSampleCount(2);
+        if (GetComponent<NetworkIdentity>().isServer || controller.vive)
+        {
+            dataInput = this.gameObject.AddComponent<TCP_Stream>();
+            dataInput.speed.changeSampleCount(2);
+        }
         
         // Cycle didnt move yet
         wasinMotion = false;
@@ -109,6 +126,8 @@ public class BycicleBehaviour : MonoBehaviour
         centerofMass = this.GetComponent<Rigidbody>().centerOfMass;
         centerofMass.y = -1.5f;
         this.GetComponent<Rigidbody>().centerOfMass = centerofMass;
+        framecounter = 0;
+        timer = Time.time; 
     }
 
 
@@ -119,7 +138,7 @@ public class BycicleBehaviour : MonoBehaviour
         // The Cave will automaticall distribute the script and run it from all PCs, 
         // to avoid this behaviour we need to check if the executing PC is the Master 
         // Otherwise the Cave will freeze 
-        if (!debugging && GetComponent<NetworkIdentity>().isServer)
+        if (!controller.debugging && (GetComponent<NetworkIdentity>().isServer || controller.vive))
         {
             // take steeringAngle from sensor
             angle = (float)Test_ReadData.AngleForMono;
@@ -128,7 +147,7 @@ public class BycicleBehaviour : MonoBehaviour
             //smoothing the angle in 3 steps
 
             // 1. smoothing the angle amplitude over all because real input degrees are to rough... (I get motion sickness)
-            angle = angle / 1.7f; 
+            //angle = angle / 1.7f; 
             // 2. Smooth the angle over time with an  average of the array of the rawSensorinput
             if (inputHandling.smoothRawSteerAngle)
                 angle = inputHandling.SmoothRawAngle(angle);
@@ -137,41 +156,56 @@ public class BycicleBehaviour : MonoBehaviour
                 angle = inputHandling.SmoothSteerAngleAtCenter(angle);
 
             // somehow the sensor Input gets decreased by aprox. 50000 if connected to the cave
-            speed = (float)Test_ReadData.speedForMono * 50000; 
+            speed = (float)Test_ReadData.speedForMono;// * 50000; 
             // One step to smooth the speed (same as SmoothRawAngle)
             if (inputHandling.smoothRawSpeed)
                 speed = inputHandling.SmoothRawSpeed(speed);
+
+            // Apply the data to the ingame Cycle
+            ApplySensorDataToBycicle();
+
+            //Lerp the Debug Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
+            camerHolder.transform.position = Vector3.Lerp(camerHolder.gameObject.transform.position, camLerpPoint.transform.position, .5f);
+            camerHolder.transform.rotation = Quaternion.Lerp(camerHolder.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
+
+            // if the cylce is shown, various gameObjects are set active, or inactive
+            ShowVirtualBycicle();
         }
 
         // if in Debug Mode, take the Data from inEditorValues
-        else if (debugging)
+        else if (controller.debugging)
         {
             angle = angleDebug;
             speed = speedDebug;
         }
 
-        // Apply the data to the ingame Cycle
-        ApplySensorDataToBycicle();
 
-        //Lerp the Debug Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
-        camerHolder.transform.position = Vector3.Lerp(camerHolder.gameObject.transform.position, camLerpPoint.transform.position, .5f);
-        camerHolder.transform.rotation = Quaternion.Lerp(camerHolder.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
+        if (Time.time - timer <= 1.0f)
+        {
+            framecounter++;
+        }
+        else if (Time.time - timer > 1.0f)
+        {
+            Debug.Log("Frames/s" + framecounter);
+            framecounter = 0;
+            timer = Time.time; 
+        }
 
-        // if the cylce is shown, various gameObjects are set active, or inactive
-        ShowVirtualBycicle();
+
     }
 
 
 
     void ApplySensorDataToBycicle()
     {
+
+
         float originalSpeed = speed;
-        speed *= (30 / 1.88f);
 
         // check if Breaking
         // not a clean solution, but it works 
         // a Coroutine is started every 0.4s, if during this time period the sensor input doesnt return any change in the speed, the cycle is standing still.
-        if (!debugging && !CoroutineRunning)
+        if (!controller.debugging && !CoroutineRunning)
         {
             StartCoroutine(CompareSpeedSamples());
             CoroutineRunning = true;
@@ -180,18 +214,24 @@ public class BycicleBehaviour : MonoBehaviour
         Vector3 turningCenter;
         float turnRadius;
         // find the radius of a turn calculated with the tirespacing
-        turnRadius = tirespacing / Mathf.Sin(Mathf.Abs(angle) * Mathf.Deg2Rad);
+        turnRadius = 2 * tirespacing / (Mathf.Sin(Mathf.Abs(angle) * Mathf.Deg2Rad));
+
         // find the Middle of the turning circle 
         turningCenter = (transform.position + (transform.right.normalized * turnRadius));
 
         // distinguish between heading left or right
-        if (angle <= 0 && !standing)
+        if (angle < 0f && !standing)
         {
             // if the angle is negativ (steering left) the turning center is flipped to the left side
             Vector3 curDirection = turningCenter - transform.position;
             turningCenter = transform.position - curDirection;
+
+
             // rotate the Cycle around the turningCenter with the given speed
-            transform.RotateAround(turningCenter, Vector3.up, -(speed / turnRadius) * Time.deltaTime);
+            float curTurnRadius = turnRadius / Mathf.Rad2Deg;
+            transform.RotateAround(turningCenter, Vector3.up, -(originalSpeed / curTurnRadius) * TimeSynchronizer.deltaTime);
+
+
 
             // you can try tilting but for me it made motion sickness occur stronger
             if (tiltCycle)
@@ -202,10 +242,11 @@ public class BycicleBehaviour : MonoBehaviour
                 transform.eulerAngles = tiltAngles;
             }
         }
-        else if (angle > 0 && !standing)
+        else if (angle > 0f && !standing)
         {
             // rotate the Cycle around the turningCenter with the given speed
-            transform.RotateAround(turningCenter, Vector3.up, (speed / turnRadius) * Time.deltaTime);
+            float curTurnRadius = turnRadius / Mathf.Rad2Deg;
+            transform.RotateAround(turningCenter, Vector3.up, (originalSpeed / curTurnRadius)  * TimeSynchronizer.deltaTime);
 
             // you can try tilting but for me it made motion sickness occur stronger
             if (tiltCycle)
@@ -215,7 +256,16 @@ public class BycicleBehaviour : MonoBehaviour
                 transform.eulerAngles = tiltAngles;
             }
         }
+
+
+        float cycleSpeed = ((this.transform.position - posLastFrame).magnitude) / TimeSynchronizer.deltaTime;
+        posLastFrame = this.transform.position;
+
+        Debug.Log("currentSpeed: " + speed * 3.6f + " SpeedINgameCycle: " + cycleSpeed * 3.6f + " faktor" + (originalSpeed / cycleSpeed)); 
+
+
     }
+
 
 
     //checking if the cycle is standing still
@@ -273,12 +323,12 @@ public class BycicleBehaviour : MonoBehaviour
        //activate / deactivate various components
     void ShowVirtualBycicle()
     {
-        handlebar.SetActive(showBycicle);
-        frame.SetActive(showBycicle);
-        wheelV.SetActive(showBycicle);
-        wheelH.SetActive(showBycicle);
+        handlebar.SetActive(controller.showVirualBycicle);
+        frame.SetActive(controller.showVirualBycicle);
+        wheelV.SetActive(controller.showVirualBycicle);
+        wheelH.SetActive(controller.showVirualBycicle);
 
-        if (showBycicle)
+        if (controller.showVirualBycicle)
         {
             Vector3 steeringAngle = new Vector3(0, angle, 0);
             handlebar.transform.localEulerAngles = steeringAngle;

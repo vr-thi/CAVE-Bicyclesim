@@ -85,7 +85,7 @@ public class NetData
 	*/
 	public String getValue (String aDataKeyName)
 	{
-		return this.fData [(aDataKeyName)].value;
+     	return this.fData [(aDataKeyName)].value;
 	}
 
 	/**
