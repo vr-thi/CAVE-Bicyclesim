@@ -15,12 +15,12 @@ public class triggerDirection : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        ARHUD.SetDirectionIndicator(true, directionImage);
+       // ARHUD.SetDirectionIndicator(true, directionImage);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        ARHUD.SetDirectioniIndicator();
+       // ARHUD.SetDirectioniIndicator();
     }
 
 
