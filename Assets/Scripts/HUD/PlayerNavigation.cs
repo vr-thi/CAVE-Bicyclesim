@@ -26,11 +26,16 @@ public class PlayerNavigation : MonoBehaviour {
     public char currentIndication = '\0';
 
     private int nextID = 0;
-    
 
-	// Use this for initialization
-	void Start () {
+    private bool arrived = false;
+
+    public TextMesh time, velocity, direction, distance;
+
+
+    // Use this for initialization
+    void Start () {
         distanceBetweenWaypoints = NavigationPath.DISTANCE_BETWEEN_POINTS;
+        arrived = false;
 		//zuweisen von animations, materials, etc.
 	}
 	
@@ -44,6 +49,10 @@ public class PlayerNavigation : MonoBehaviour {
     {
         if (other.name.Contains("Intersection"))
         {
+            if (other.name.Contains("Start"))
+            {
+                arrived = false;
+            }
             IntersectionProperties temp = other.gameObject.GetComponent<IntersectionProperties>();
 
             if (nextID == temp.intersectionID)
@@ -53,18 +62,21 @@ public class PlayerNavigation : MonoBehaviour {
                 if (nextPath != null)
                 {
                     nextTurnSign = temp.nextTurnSign;
-                    currentIndication = 'l';
+                    currentIndication = temp.nextTurnSign;
+                    direction.text = currentIndication.ToString();
                     changePath = true;
                 }
                 else
                 {
                     nextTurnSign = '\0';
                     currentIndication = 'z';
+                    direction.text = "Ziel";
                 }
             }
             else if (nextID == -1)
             {
                 nextID = 0;
+                arrived = true;
             }
         }
 
@@ -78,8 +90,13 @@ public class PlayerNavigation : MonoBehaviour {
 
             //set straightSign
             currentIndication = 's';
+            direction.text = "s";
 
             changePath = false;
+        }
+        if (arrived)
+        {
+            //arrive message
         }
     }
 
@@ -103,11 +120,14 @@ public class PlayerNavigation : MonoBehaviour {
         {
             //ARHUD display distance
             distanceToInter = displayedDistanceToNextIntersection;
+            distance.text = distanceToInter.ToString() + " m";
+
         }
         else
         {
             //ARHUD display empty string ""
             distanceToInter = -1;
+            distance.text = "";
         }
 
         //distanceToInter = displayedDistanceToNextIntersection;

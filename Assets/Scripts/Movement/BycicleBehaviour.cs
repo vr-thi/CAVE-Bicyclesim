@@ -19,6 +19,7 @@ public class BycicleBehaviour : MonoBehaviour
     public GameObject handlebar;
     public GameObject frame;
 
+    public TextMesh velocity;
 
 
     [Tooltip("The Node Manager Prefab of the Cave")]
@@ -163,6 +164,8 @@ public class BycicleBehaviour : MonoBehaviour
 
             // Apply the data to the ingame Cycle
             ApplySensorDataToBycicle();
+
+            velocity.text = speed.ToString() + " km/h";
 
             //Lerp the Debug Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
             camerHolder.transform.position = Vector3.Lerp(camerHolder.gameObject.transform.position, camLerpPoint.transform.position, .5f);

@@ -10,5 +10,7 @@ public class IntersectionProperties:MonoBehaviour {
     public int nextID;
 
     public char nextTurnSign;
+
+    public TextMesh time, velocity, direction;
 	
 }

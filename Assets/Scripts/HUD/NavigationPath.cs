@@ -98,7 +98,7 @@ public class LookUpTable
 [System.Serializable]
 public class CPC_Point
 {
-    private GameObject waypoint;
+    
 
     public Vector3 waypointHandlePrev;
     public Vector3 waypointHandleNext;
@@ -140,8 +140,7 @@ public class NavigationPath : MonoBehaviour
 
     private int mPathCount = -1; //needed for access of trajectory represenation
 
-    // visualization of trajectory points on HUD
-    private GameObject mSelf;
+
 
     public bool lookAtTarget = false;
     public Transform target;
@@ -208,9 +207,7 @@ public class NavigationPath : MonoBehaviour
     private void Start()
     {
 
-        _transform = (Transform)target;
 
-        mSelf = this.gameObject;
         LengthBetweenWaypoints.Clear();
         precalculatedPointsPosition.Clear();
         precalculatedPointsRotation.Clear();
