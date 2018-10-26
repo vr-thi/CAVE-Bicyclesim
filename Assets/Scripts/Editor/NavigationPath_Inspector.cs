@@ -60,12 +60,16 @@ public class NavigationPath_Inspector : Editor
 
     private bool hasScrollBar = false;
 
+ 
+
+
     void OnEnable()
     {
         EditorApplication.update += Update;
 
         t = (NavigationPath)target;
         if (t == null) return;
+        
 
         SetupEditorVariables();
         GetVariableProperties();
@@ -219,7 +223,7 @@ public class NavigationPath_Inspector : Editor
             var i = t.points[index];
             EditorGUI.BeginChangeCheck();
             //GUILayout.BeginVertical("Box");
-            Vector3 pos = EditorGUI.Vector3Field(rect, "Waypoint Position", i.waypointPosition);
+            Vector3 pos = EditorGUI.Vector3Field(rect, "Waypoint Position", i.waypointPositionLocal);
             rect.y = rect.y + rect.height + 2;
             Quaternion rot = Quaternion.Euler(EditorGUI.Vector3Field(rect, "Waypoint Rotation", i.waypointRotation.eulerAngles));
             rect.y = rect.y + rect.height + 2;
@@ -233,7 +237,8 @@ public class NavigationPath_Inspector : Editor
             {
                 Undo.RecordObject(t, "Changed waypoint transform");
 
-                i.waypointPosition = pos;
+                i.waypointPosition = pos + t.gameObject.transform.position;
+                i.waypointPositionLocal = pos;
                 i.waypointRotation = rot;
                 i.waypointHandleNext = posn;
                 i.waypointHandlePrev = posp;
@@ -244,10 +249,12 @@ public class NavigationPath_Inspector : Editor
 
     }
 
+    
+
     void DrawBasicSettings()
     {
         GUILayout.BeginHorizontal();
-        playerProperty.objectReferenceValue = (GameObject)EditorGUILayout.ObjectField("PlayerReference", playerProperty.objectReferenceValue, typeof(GameObject), true);
+        playerProperty.objectReferenceValue = (GameObject)EditorGUILayout.ObjectField("PlayerReference", playerProperty.objectReferenceValue, typeof(Transform), true);
         GUI.enabled = true;
         GUILayout.EndHorizontal();
     }
@@ -498,6 +505,7 @@ public class NavigationPath_Inspector : Editor
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(target, "Moved Waypoint");
+                t.points[i].waypointPositionLocal = pos - t.transform.position;
                 t.points[i].waypointPosition = pos;
             }
         }
@@ -545,22 +553,17 @@ public class NavigationPath_Inspector : Editor
         }
     }
 
-    /*void DrawRawValues()
+    void DrawRawValues()
     {
-        if (GUILayout.Button(showRawValues ? "Hide raw values" : "Show raw values"))
-            showRawValues = !showRawValues;
 
-        if (showRawValues)
-        {
             foreach (var i in t.points)
             {
                 EditorGUI.BeginChangeCheck();
                 GUILayout.BeginVertical("Box");
-                Vector3 pos = EditorGUILayout.Vector3Field("Waypoint Position", i.position);
-                Quaternion rot = Quaternion.Euler(EditorGUILayout.Vector3Field("Waypoint Rotation", i.rotation.eulerAngles));
-                Vector3 posp = EditorGUILayout.Vector3Field("Previous Handle Offset", i.handleprev);
-                Vector3 posn = EditorGUILayout.Vector3Field("Next Handle Offset", i.handlenext);
-                float speed = EditorGUILayout.FloatField("Speed [m/s]", i.handleSpeed);
+                Vector3 pos = EditorGUILayout.Vector3Field("Waypoint Position", i.waypointPositionLocal);
+                Quaternion rot = Quaternion.Euler(EditorGUILayout.Vector3Field("Waypoint Rotation", i.waypointRotation.eulerAngles));
+                Vector3 posp = EditorGUILayout.Vector3Field("Previous Handle Offset", i.waypointHandlePrev);
+                Vector3 posn = EditorGUILayout.Vector3Field("Next Handle Offset", i.waypointHandleNext);
                 
                 // bool displayTrajectory = EditorGUILayout.Toggle("Trajectory displayed", i.handleTrajectoryDisplayed);
                 //bool stopSign = EditorGUILayout.Toggle("Stop Sign Active", i.handleStopSign);
@@ -568,14 +571,15 @@ public class NavigationPath_Inspector : Editor
                 if (EditorGUI.EndChangeCheck())
                 {
                     Undo.RecordObject(t, "Changed waypoint transform");
-                    i.position = pos;
-                    i.rotation = rot;
-                    i.handleprev = posp;
-                    i.handlenext = posn;
-                    i.handleSpeed = speed;
+                    i.waypointPositionLocal = pos;
+                    i.waypointPosition = pos + t.gameObject.transform.position;
+                    i.waypointRotation = rot;
+                    i.waypointHandlePrev = posp;
+                    i.waypointHandleNext = posn;
+                    
                     SceneView.RepaintAll();
                 }
             }
-        }
-    }*/
+        
+    }
 }

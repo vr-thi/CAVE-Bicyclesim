@@ -104,6 +104,7 @@ public class CPC_Point
     public Vector3 waypointHandleNext;
     public Vector3 waypointPosition;
     public Quaternion waypointRotation;
+    public Vector3 waypointPositionLocal;
 
     public AnimationCurve rotationCurve;
     public AnimationCurve positionCurve;
@@ -127,11 +128,14 @@ public class CPC_Point
 
 public class NavigationPath : MonoBehaviour
 {
-    private static float DISTANCE_BETWEEN_POINTS = 10;
+    public static int DISTANCE_BETWEEN_POINTS = 10;
     //parent vehicle
-    public GameObject player; // this.gameObject
+    public Transform player; // this.gameObject
+
+    public Transform _transform;
 
     private List<GameObject> distancePoints = new List<GameObject>();
+    private List<Vector3> distancePointsPosition = new List<Vector3>();
     private int distanceInitCounter = 0;
 
     private int mPathCount = -1; //needed for access of trajectory represenation
@@ -204,14 +208,14 @@ public class NavigationPath : MonoBehaviour
     private void Start()
     {
 
-        
+        _transform = (Transform)target;
 
         mSelf = this.gameObject;
         LengthBetweenWaypoints.Clear();
         precalculatedPointsPosition.Clear();
         precalculatedPointsRotation.Clear();
         distancePoints.Clear();
-        distancePoints = new List<GameObject>();
+        distancePointsPosition.Clear();
 
         foreach (var index in points)
         {
@@ -313,51 +317,9 @@ public class NavigationPath : MonoBehaviour
         }
     }
 
-    public void FollowPathCombined()//int index)
+   public List<Vector3> GetDistancePointsPosition()
     {
-
-        if (!inactive)
-        {
-            if (currentWaypointIndex < points.Count)
-            {
-                timeDelta = Time.fixedDeltaTime;
-                // vehicle movement
-
-
-                if (alreadyTriggered)
-                //if(currentTimeInWaypointProspective >= ScenarioSettings.previewTimeOffset){
-
-                {
-                    if (fractionMoved < LengthBetweenWaypoints[currentWaypointIndex])
-                    {
-
-                        currentTimeInWaypoint += timeDelta;
-                        //fractionMoved = (startVelocity * currentTimeInWaypoint + 0.5f * accelerationList[currentWaypointIndex] * currentTimeInWaypoint * currentTimeInWaypoint);
-                        float t = LUT[currentWaypointIndex].GetTvalueAtDistance(fractionMoved);
-                        //selectedVehicle.transform.position = GetPointAtTime(currentWaypointIndex, t); // made changes take t^2
-
-                        distanceTravelled = GetOffsetDistanceTravelled(currentWaypointIndex) + fractionMoved;
-
-                        //set rotation
-                        // selectedVehicle.transform.rotation = GetLerpRotation(currentWaypointIndex, t);
-
-                    }
-                    else
-                    {
-
-                        ++currentWaypointIndex;
-                        fractionMoved = 0;
-                        /*if (currentTimeInWaypoint > timeNeeded)
-                            currentTimeInWaypoint = currentTimeInWaypoint - timeNeeded;
-                        else*/
-                        currentTimeInWaypoint = 0;
-
-
-                        timeNeededVeh = timeBetweenWaypoints[currentWaypointIndex]; //time needed calculated with x = v*t + 0.5*a*t*2
-                    }
-                }
-            }
-        }
+        return distancePointsPosition;
     }
 
 
@@ -513,10 +475,15 @@ public class NavigationPath : MonoBehaviour
             //LUT[waypointIndex].Add(i, i * tFraction);
             //LUT[waypointIndex].GetTvalueAtDistance(i);
             Vector3 newPosition = LinearBezier(startPoint, endPoint, i * tFraction);
-            GameObject newDistancePosition = new GameObject("waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS);
+            GameObject newDistancePosition;
+            newDistancePosition = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            newDistancePosition.name = "waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS;
+            
+           // GameObject newDistancePosition = new GameObject("waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS);
             distanceInitCounter++;
             newDistancePosition.transform.position = newPosition;
             newDistancePosition.transform.SetParent(this.gameObject.transform);
+            distancePointsPosition.Add(newPosition);
             distancePoints.Add(newDistancePosition);
             Debug.Log("DistancePoint i, " + newDistancePosition.ToString());
             //newDistancePosition.AddComponent<DistancePointProperties>();
@@ -573,9 +540,13 @@ public class NavigationPath : MonoBehaviour
         {
             float tValue = LUT[waypointIndex].GetTvalueAtDistance(i);
             Vector3 newPosition = QuadBezier(startPoint, handle, endPoint, tValue);
-            GameObject newDistancePosition = new GameObject("waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS);
+            //GameObject newDistancePosition = new GameObject("waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS);
+            GameObject newDistancePosition;
+            newDistancePosition = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            newDistancePosition.name = "waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS;
             newDistancePosition.transform.SetParent(this.gameObject.transform);
             newDistancePosition.transform.position = newPosition;
+            distancePointsPosition.Add(newPosition);
             distancePoints.Add(newDistancePosition);
             distanceInitCounter++;
         }
@@ -630,9 +601,13 @@ public class NavigationPath : MonoBehaviour
         {
             float tValue = LUT[waypointIndex].GetTvalueAtDistance(i);
             Vector3 newPosition = CubicBezier(startPoint, handleStart, handleEnd, endPoint, tValue);
-            GameObject newDistancePosition = new GameObject("waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS);
+            //GameObject newDistancePosition = new GameObject("waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS);
+            GameObject newDistancePosition;
+            newDistancePosition = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            newDistancePosition.name = "waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS;
             newDistancePosition.transform.SetParent(this.gameObject.transform);
             newDistancePosition.transform.position = newPosition;
+            distancePointsPosition.Add(newPosition);
             distancePoints.Add(newDistancePosition);
             distanceInitCounter++;
         }
@@ -785,15 +760,15 @@ public class NavigationPath : MonoBehaviour
     {
         List<Vector3> pixels = new List<Vector3>();
         curveCount = points.Count;
+        int seg = 1;
+        Vector3 pixelFrom, pixelTo;
         // lineRenderer.positionCount = SEGMENT_COUNT*curveCount;
         for (int i = 0; i < curveCount; i++)
         {
 
             if (i < points.Count - 1)
             {
-
-                //    {
-                for (int seg = 1; seg < SEGMENT_COUNT; seg++)
+                for (seg = 0; seg < SEGMENT_COUNT; seg++)
                 {
 
                     float tFrom = seg / (float)SEGMENT_COUNT;
@@ -810,7 +785,7 @@ public class NavigationPath : MonoBehaviour
 
                     //return value
                     Vector3 val;
-                    Vector3 pixelFrom, pixelTo;
+                    
 
                     //calculate position on bezier curve depending on order of curve
                     if (B == Vector3.zero && C == Vector3.zero)
@@ -834,7 +809,10 @@ public class NavigationPath : MonoBehaviour
                         pixelTo = CubicBezier(A, B + A, C + D, D, tTo);
                     }
 
+                    UnityEditor.Handles.color = Color.green;
                     UnityEditor.Handles.DrawLine(pixelFrom, pixelTo);
+
+                    
                     
                     //lineRenderer.SetVertexCount(((i * SEGMENT_COUNT) + seg));
                     //lineRenderer.SetPosition(i * (SEGMENT_COUNT) + (seg - 1), pixel);
@@ -844,6 +822,7 @@ public class NavigationPath : MonoBehaviour
             }
 
         }
+
     }
 }
 
