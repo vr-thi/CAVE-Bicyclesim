@@ -53,7 +53,8 @@ public class FlyStickInteraction : MonoBehaviour
         {
             model = GameObject.FindWithTag("InteractiveModel");
         }
-        drawLaser();
+        if(model != null)
+            drawLaser();
     }
 
     public void sendRay()

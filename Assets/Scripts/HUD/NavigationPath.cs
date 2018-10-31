@@ -204,6 +204,7 @@ public class NavigationPath : MonoBehaviour
     private int SEGMENT_COUNT = 50;
 
 
+
     private void Start()
     {
 
@@ -458,7 +459,7 @@ public class NavigationPath : MonoBehaviour
         Debug.Log("leng: " + length + ", offset " + offset);
         if (length - offset < DISTANCE_BETWEEN_POINTS && offset > length)
         {
-            offset = DISTANCE_BETWEEN_POINTS - (length - offset);
+            offset = offset - length;
             Debug.Log("offset as offset > length: " + offset);
             return offset;
         }
@@ -472,11 +473,11 @@ public class NavigationPath : MonoBehaviour
             //LUT[waypointIndex].Add(i, i * tFraction);
             //LUT[waypointIndex].GetTvalueAtDistance(i);
             Vector3 newPosition = LinearBezier(startPoint, endPoint, i * tFraction);
-            GameObject newDistancePosition;
-            newDistancePosition = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            newDistancePosition.name = "waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS;
+            //GameObject newDistancePosition;
+            //newDistancePosition = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            //newDistancePosition.name = "waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS;
             
-           // GameObject newDistancePosition = new GameObject("waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS);
+           GameObject newDistancePosition = new GameObject("waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS);
             distanceInitCounter++;
             newDistancePosition.transform.position = newPosition;
             newDistancePosition.transform.SetParent(this.gameObject.transform);
@@ -524,7 +525,7 @@ public class NavigationPath : MonoBehaviour
         Debug.Log("leng: " + length + ", offset " + offset);
         if (length - offset < DISTANCE_BETWEEN_POINTS && offset > length)
         {
-            offset = DISTANCE_BETWEEN_POINTS - (length - offset);
+            offset = offset - length;//DISTANCE_BETWEEN_POINTS - (length - offset);
             Debug.Log("offset as offset > length: " + offset);
             return offset;
         }
@@ -537,10 +538,10 @@ public class NavigationPath : MonoBehaviour
         {
             float tValue = LUT[waypointIndex].GetTvalueAtDistance(i);
             Vector3 newPosition = QuadBezier(startPoint, handle, endPoint, tValue);
-            //GameObject newDistancePosition = new GameObject("waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS);
-            GameObject newDistancePosition;
-            newDistancePosition = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            newDistancePosition.name = "waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS;
+            GameObject newDistancePosition = new GameObject("waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS);
+            //GameObject newDistancePosition;
+            //newDistancePosition = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            //newDistancePosition.name = "waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS;
             newDistancePosition.transform.SetParent(this.gameObject.transform);
             newDistancePosition.transform.position = newPosition;
             distancePointsPosition.Add(newPosition);
@@ -587,7 +588,7 @@ public class NavigationPath : MonoBehaviour
         Debug.Log("leng: " + length + ", offset " + offset);
         if (length - offset < DISTANCE_BETWEEN_POINTS && offset > length)
         {
-            offset = DISTANCE_BETWEEN_POINTS - (length - offset);
+            offset = offset - length; //DISTANCE_BETWEEN_POINTS - (length - offset);
             Debug.Log("offset as offset > length: " + offset);
             return offset;
         }
@@ -598,9 +599,9 @@ public class NavigationPath : MonoBehaviour
         {
             float tValue = LUT[waypointIndex].GetTvalueAtDistance(i);
             Vector3 newPosition = CubicBezier(startPoint, handleStart, handleEnd, endPoint, tValue);
-            //GameObject newDistancePosition = new GameObject("waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS);
-            GameObject newDistancePosition;
-            newDistancePosition = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            GameObject newDistancePosition = new GameObject("waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS);
+            //GameObject newDistancePosition;
+            //newDistancePosition = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             newDistancePosition.name = "waypoint_distance_" + distanceInitCounter * DISTANCE_BETWEEN_POINTS;
             newDistancePosition.transform.SetParent(this.gameObject.transform);
             newDistancePosition.transform.position = newPosition;
@@ -753,6 +754,7 @@ public class NavigationPath : MonoBehaviour
     //            sw.Close();
     //    }
 
+#if UNITY_EDITOR
     void DrawCurve()
     {
         List<Vector3> pixels = new List<Vector3>();
@@ -821,5 +823,6 @@ public class NavigationPath : MonoBehaviour
         }
 
     }
+#endif
 }
 

@@ -19,7 +19,7 @@ public class BycicleBehaviour : MonoBehaviour
     public GameObject handlebar;
     public GameObject frame;
 
-    public TextMesh velocity;
+
 
 
     [Tooltip("The Node Manager Prefab of the Cave")]
@@ -27,7 +27,7 @@ public class BycicleBehaviour : MonoBehaviour
     [Tooltip("The default Unity Camera, which is active in Debug mode")]
     public GameObject defaultCamera;
     [Tooltip("The CameraHolder")]
-    public GameObject camerHolder;
+    public GameObject cameraHolder;
     [Tooltip("The point towards which the Camera is Lerped in the Update Method")]
     public GameObject camLerpPoint;
    // [Tooltip("Connection to the bycicle TCP_Stream")]
@@ -53,7 +53,7 @@ public class BycicleBehaviour : MonoBehaviour
     [HideInInspector]
     public float angle;
     [Tooltip("speed, which gets input from TCP stream")]
-    private float speed;
+    private float speed = 0f;
 
 
     [Tooltip("If the Cycle should tilt while driving a corner")]
@@ -136,6 +136,8 @@ public class BycicleBehaviour : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+
+
         // The Cave will automaticall distribute the script and run it from all PCs, 
         // to avoid this behaviour we need to check if the executing PC is the Master 
         // Otherwise the Cave will freeze 
@@ -158,22 +160,27 @@ public class BycicleBehaviour : MonoBehaviour
 
             // somehow the sensor Input gets decreased by aprox. 50000 if connected to the cave
             speed = (float)Test_ReadData.speedForMono;// * 50000; 
-            // One step to smooth the speed (same as SmoothRawAngle)
+                                                      // One step to smooth the speed (same as SmoothRawAngle)
             if (inputHandling.smoothRawSpeed)
                 speed = inputHandling.SmoothRawSpeed(speed);
 
             // Apply the data to the ingame Cycle
             ApplySensorDataToBycicle();
 
-            velocity.text = speed.ToString() + " km/h";
+          //  velocity.text = speed.ToString() + " km/h";
 
             //Lerp the Debug Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
-            camerHolder.transform.position = Vector3.Lerp(camerHolder.gameObject.transform.position, camLerpPoint.transform.position, .5f);
-            camerHolder.transform.rotation = Quaternion.Lerp(camerHolder.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
+            cameraHolder.transform.position = Vector3.Lerp(cameraHolder.gameObject.transform.position, camLerpPoint.transform.position, .5f);
+            cameraHolder.transform.rotation = Quaternion.Lerp(cameraHolder.gameObject.transform.rotation, camLerpPoint.transform.rotation, .5f);
 
             // if the cylce is shown, various gameObjects are set active, or inactive
-            ShowVirtualBycicle();
+            ShowVirtualBicycle();
         }
+
+
+
+
+
 
         // if in Debug Mode, take the Data from inEditorValues
         else if (controller.debugging)
@@ -197,6 +204,12 @@ public class BycicleBehaviour : MonoBehaviour
 
     }
 
+    public float GetSpeed()
+    {
+
+            return speed;
+
+    }
 
 
     void ApplySensorDataToBycicle()
@@ -324,7 +337,7 @@ public class BycicleBehaviour : MonoBehaviour
     }
 
        //activate / deactivate various components
-    void ShowVirtualBycicle()
+    void ShowVirtualBicycle()
     {
         handlebar.SetActive(controller.showVirualBycicle);
         frame.SetActive(controller.showVirualBycicle);

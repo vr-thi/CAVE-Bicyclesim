@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 
 public class PlayerNavigation : MonoBehaviour {
 
@@ -12,7 +14,7 @@ public class PlayerNavigation : MonoBehaviour {
     public int distanceToInter = -1;
 
     private Animation rightStraightAnimation, leftStraightAnimation, straightLeftAnimmation, straigthRightAnimation;
-    private Material leftArrow, rightArrow, straighArrow;
+
 
     private float distanceToNextIntersection = -1f;
     private int displayedDistanceToNextIntersection = -1;
@@ -25,23 +27,67 @@ public class PlayerNavigation : MonoBehaviour {
 
     public char currentIndication = '\0';
 
-    private int nextID = 0;
+    private int nextID = -2;
 
     private bool arrived = false;
 
     public TextMesh time, velocity, direction, distance;
+
+    private Camera mainCamera;
+
+    public GameObject holder;
+
+    private DateTime timeNow;
+
+    public Material arrowLeft, arrowRight, arrowStraight, transparent;
+
+    public Renderer naviRenderer;
+
+    public BycicleBehaviour bb;
+
+    
 
 
     // Use this for initialization
     void Start () {
         distanceBetweenWaypoints = NavigationPath.DISTANCE_BETWEEN_POINTS;
         arrived = false;
-		//zuweisen von animations, materials, etc.
-	}
+        //zuweisen von animations, materials, etc.
+
+        //mainCamera = GameObject.FindObjectOfType<Camera>();
+        //holder = GameObject.Find("CameraHolder");
+
+        //this.transform.LookAt(holder.transform.position + holder.transform.forward * 2f);
+        //this.transform.SetParent(holder.transform);
+        ////  this.transform.rotation.SetEulerAngles(holder.transform.rotation.eulerAngles.z, -holder.transform.rotation.eulerAngles.y - 90f, holder.transform.rotation.eulerAngles.x);
+        //this.transform.localPosition = new Vector3(0, 0, 0.5f);
+        //this.transform.localRotation = Quaternion.identity;
+
+        direction.text = "";
+        timeNow = DateTime.Now;
+        time.text = "" + timeNow.Hour + ":" + timeNow.Minute;
+        velocity.text = "xx km/h";
+
+        naviRenderer.material = transparent;
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if(nextPath != null)
+
+        //this.transform.rotation.SetEulerAngles(0f, (this.transform.rotation.eulerAngles.y +290)%360, this.transform.rotation.eulerAngles.z);
+
+        //this.transform.rotation.SetEulerAngles(holder.transform.rotation.eulerAngles.z, -holder.transform.rotation.eulerAngles.y, holder.transform.rotation.eulerAngles.x);
+
+        time.text =  timeNow.Hour.ToString("D2") + ":" + timeNow.Minute.ToString("D2");
+
+        
+
+
+        
+        
+
+        if (nextPath != null)
             CalculateDistanceToIntersection();
 	}
 
@@ -63,14 +109,22 @@ public class PlayerNavigation : MonoBehaviour {
                 {
                     nextTurnSign = temp.nextTurnSign;
                     currentIndication = temp.nextTurnSign;
-                    direction.text = currentIndication.ToString();
+                    if (currentIndication == 's')
+                        naviRenderer.material = arrowStraight;
+                    else if (currentIndication == 'r')
+                        naviRenderer.material = arrowRight;
+                    else if (currentIndication == 'l')
+                        naviRenderer.material = arrowLeft;
+                    else
+                        naviRenderer.material = transparent;
                     changePath = true;
                 }
                 else
                 {
                     nextTurnSign = '\0';
                     currentIndication = 'z';
-                    direction.text = "Ziel";
+                    direction.text = "Ziel \n erreicht";
+                    naviRenderer.material = transparent;
                 }
             }
             else if (nextID == -1)
@@ -89,14 +143,15 @@ public class PlayerNavigation : MonoBehaviour {
             //start Animation
 
             //set straightSign
-            currentIndication = 's';
-            direction.text = "s";
+            currentIndication = nextTurnSign;
+            //direction.text = nextTurnSign.ToString();
 
             changePath = false;
         }
         if (arrived)
         {
             //arrive message
+            direction.text = "Ziel";
         }
     }
 
@@ -116,19 +171,19 @@ public class PlayerNavigation : MonoBehaviour {
         
         displayedDistanceToNextIntersection = (minIndex) * distanceBetweenWaypoints;
 
-        if (displayedDistanceToNextIntersection <= displayDistanceMinimum)
-        {
+        //if (displayedDistanceToNextIntersection <= displayDistanceMinimum)
+        //{
             //ARHUD display distance
             distanceToInter = displayedDistanceToNextIntersection;
             distance.text = distanceToInter.ToString() + " m";
 
-        }
-        else
-        {
-            //ARHUD display empty string ""
-            distanceToInter = -1;
-            distance.text = "";
-        }
+        //}
+        //else
+        //{
+        //    //ARHUD display empty string ""
+        //    distanceToInter = -1;
+        //    distance.text = "empty";
+        //}
 
         //distanceToInter = displayedDistanceToNextIntersection;
 

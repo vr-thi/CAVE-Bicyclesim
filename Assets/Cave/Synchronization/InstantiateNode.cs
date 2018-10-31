@@ -41,6 +41,7 @@ namespace Cave
 
                 trackerSettings = (TrackerSettings)originSlave.transform.Find("Flystick").GetComponent("TrackerSettings");
                 trackerSettings.HostSettings = (TrackerHostSettings)GameObject.Find("NodeManager/TrackerHostSettings").GetComponent("TrackerHostSettings");
+                //trackerSettings.gameObject.SetActive(false);
 
             }
             else

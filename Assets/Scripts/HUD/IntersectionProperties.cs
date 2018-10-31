@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class IntersectionProperties:MonoBehaviour {
 
     public NavigationPath nextPath;
@@ -11,6 +12,4 @@ public class IntersectionProperties:MonoBehaviour {
 
     public char nextTurnSign;
 
-    public TextMesh time, velocity, direction;
-	
 }
