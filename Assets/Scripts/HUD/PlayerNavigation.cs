@@ -54,14 +54,14 @@ public class PlayerNavigation : MonoBehaviour {
         arrived = false;
         //zuweisen von animations, materials, etc.
 
-        mainCamera = GameObject.FindObjectOfType<Camera>();
-        holder = GameObject.Find("Flystick");
+        //mainCamera = GameObject.FindObjectOfType<Camera>();
+        //holder = GameObject.Find("Flystick");
 
-        this.transform.LookAt(holder.transform.position + holder.transform.forward * 2f);
-        this.transform.SetParent(holder.transform);
-        ////  this.transform.rotation.SetEulerAngles(holder.transform.rotation.eulerAngles.z, -holder.transform.rotation.eulerAngles.y - 90f, holder.transform.rotation.eulerAngles.x);
-        this.transform.localPosition = new Vector3(0, 0, 3f);
-        this.transform.localRotation = Quaternion.identity;
+        //this.transform.LookAt(holder.transform.position + holder.transform.forward * 2f);
+        //this.transform.SetParent(holder.transform);
+        //////  this.transform.rotation.SetEulerAngles(holder.transform.rotation.eulerAngles.z, -holder.transform.rotation.eulerAngles.y - 90f, holder.transform.rotation.eulerAngles.x);
+        //this.transform.localPosition = new Vector3(0, 0, 3f);
+        //this.transform.localRotation = Quaternion.identity;
 
      
         
