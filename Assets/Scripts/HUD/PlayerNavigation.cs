@@ -54,18 +54,18 @@ public class PlayerNavigation : MonoBehaviour {
         arrived = false;
         //zuweisen von animations, materials, etc.
 
-        //mainCamera = GameObject.FindObjectOfType<Camera>();
-        //holder = GameObject.Find("CameraHolder");
+        mainCamera = GameObject.FindObjectOfType<Camera>();
+        holder = GameObject.Find("Flystick");
 
-        //this.transform.LookAt(holder.transform.position + holder.transform.forward * 2f);
-        //this.transform.SetParent(holder.transform);
+        this.transform.LookAt(holder.transform.position + holder.transform.forward * 2f);
+        this.transform.SetParent(holder.transform);
         ////  this.transform.rotation.SetEulerAngles(holder.transform.rotation.eulerAngles.z, -holder.transform.rotation.eulerAngles.y - 90f, holder.transform.rotation.eulerAngles.x);
-        //this.transform.localPosition = new Vector3(0, 0, 0.5f);
-        //this.transform.localRotation = Quaternion.identity;
+        this.transform.localPosition = new Vector3(0, 0, 3f);
+        this.transform.localRotation = Quaternion.identity;
 
-        direction.text = "";
-        timeNow = DateTime.Now;
-        time.text = "" + timeNow.Hour + ":" + timeNow.Minute;
+     
+        
+        time.text = Cave.TimeSynchronizer.timeHour.ToString("D2") + ":" + Cave.TimeSynchronizer.timeMinute.ToString("D2");
         velocity.text = "xx km/h";
 
         naviRenderer.material = transparent;
@@ -79,10 +79,10 @@ public class PlayerNavigation : MonoBehaviour {
 
         //this.transform.rotation.SetEulerAngles(holder.transform.rotation.eulerAngles.z, -holder.transform.rotation.eulerAngles.y, holder.transform.rotation.eulerAngles.x);
 
-        time.text =  timeNow.Hour.ToString("D2") + ":" + timeNow.Minute.ToString("D2");
+        time.text =  Cave.TimeSynchronizer.timeHour.ToString("D2") + ":" + Cave.TimeSynchronizer.timeMinute.ToString("D2");
 
         
-
+        velocity.text = Cave.VelocitySynchronizer.velocity.ToString("00") + " km/h";
 
         
         
@@ -123,7 +123,7 @@ public class PlayerNavigation : MonoBehaviour {
                 {
                     nextTurnSign = '\0';
                     currentIndication = 'z';
-                    direction.text = "Ziel \n erreicht";
+                    
                     naviRenderer.material = transparent;
                 }
             }
@@ -151,7 +151,7 @@ public class PlayerNavigation : MonoBehaviour {
         if (arrived)
         {
             //arrive message
-            direction.text = "Ziel";
+           
         }
     }
 

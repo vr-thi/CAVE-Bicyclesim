@@ -53,7 +53,7 @@ public class BycicleBehaviour : MonoBehaviour
     [HideInInspector]
     public float angle;
     [Tooltip("speed, which gets input from TCP stream")]
-    private float speed = 0f;
+    public static float speed = 0f;
 
 
     [Tooltip("If the Cycle should tilt while driving a corner")]
@@ -119,7 +119,7 @@ public class BycicleBehaviour : MonoBehaviour
             dataInput = this.gameObject.AddComponent<TCP_Stream>();
             dataInput.speed.changeSampleCount(2);
         }
-        
+
         // Cycle didnt move yet
         wasinMotion = false;
 
@@ -163,6 +163,7 @@ public class BycicleBehaviour : MonoBehaviour
                                                       // One step to smooth the speed (same as SmoothRawAngle)
             if (inputHandling.smoothRawSpeed)
                 speed = inputHandling.SmoothRawSpeed(speed);
+
 
             // Apply the data to the ingame Cycle
             ApplySensorDataToBycicle();

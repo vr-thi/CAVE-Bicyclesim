@@ -4,7 +4,7 @@ using System.Collections;
 namespace Cave
 {
    
-    public class Synchronizer : MonoBehaviour
+    public class BikeSimSynchronizer : MonoBehaviour
     {
         public string[] relevantAxes = { "Vertical", "Horizontal" };
         public string[] relevantButtons = { };
@@ -17,8 +17,8 @@ namespace Cave
 
         void Start()
         {
-            flyStick = GameObject.Find("Flystick");
-            GUISynchronizer.Prepare();
+            //flyStick = GameObject.Find("Flystick");
+            //GUISynchronizer.Prepare();
             started = false;
             
             if (!NodeInformation.isMaster())
@@ -63,13 +63,15 @@ namespace Cave
                 InputMessage inputMessage = new InputMessage();
 
                 TimeSynchronizer.BuildMessage(inputMessage.inputTimeMessage);
-                InputSynchronizer.BuildMessage(this, inputMessage.inputInputMessage);
+               // InputSynchronizer.BuildMessage(this, inputMessage.inputInputMessage);
                 ParticleSynchronizer.BuildMessage(inputMessage.inputParticleMessage);
                 AnimatorSynchronizer.BuildMessage(inputMessage.inputAnimatorMessage);
                 TrackingSynchronizer.BuildMessage(inputMessage.inputTrackingMessage);
                 TransformationSynchronizer.BuildMessage(inputMessage.inputTransformationMessage);
                 EventSynchronizer.BuildMessage(inputMessage.inputEventsMessage);
-                VelocitySynchronizer.BuildMessage(inputMessage.inputVelocityMessage);
+                Debug.Log("All is okay 1");
+               // VelocitySynchronizer.BuildMessage(inputMessage.inputVelocityMessage);
+                Debug.Log("Still okay");
 
                 node.BroadcastMessage(inputMessage);
             }
@@ -79,13 +81,13 @@ namespace Cave
                 ((Client)node).WaitForNextMessage(inputMessage);
 
                 TimeSynchronizer.ProcessMessage(inputMessage.inputTimeMessage);
-                InputSynchronizer.ProcessMessage(this, inputMessage.inputInputMessage);
+              //  InputSynchronizer.ProcessMessage(this, inputMessage.inputInputMessage);
                 ParticleSynchronizer.ProcessMessage(inputMessage.inputParticleMessage);
                 AnimatorSynchronizer.ProcessMessage(inputMessage.inputAnimatorMessage);
                 TrackingSynchronizer.ProcessMessage(inputMessage.inputTrackingMessage);
                 TransformationSynchronizer.ProcessMessage(inputMessage.inputTransformationMessage);
                 EventSynchronizer.ProcessMessage(inputMessage.inputEventsMessage);
-                VelocitySynchronizer.ProcessMessage(inputMessage.inputVelocityMessage);
+               // VelocitySynchronizer.ProcessMessage(inputMessage.inputVelocityMessage);
             }
             
             StartCoroutine(EndOfFrame());
