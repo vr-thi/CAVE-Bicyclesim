@@ -11,7 +11,7 @@ public static class ViconVRPN
     public static Quaternion vrpnTrackerQuat(string address, int channel)
     {
         var quaternion = VRPN.vrpnTrackerQuat(address, channel);
-        return new Quaternion(-quaternion.y, -quaternion.z, -quaternion.x, quaternion.w);
+        return new Quaternion(-quaternion.x, -quaternion.z, -quaternion.y, quaternion.w);
         //Quaternion quaternion = VRPN.vrpnTrackerQuat(address, channel);
 
         //if (quaternion == new Quaternion(-505, -505, -505, -505))

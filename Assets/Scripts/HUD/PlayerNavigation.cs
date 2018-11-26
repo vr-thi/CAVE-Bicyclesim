@@ -45,6 +45,7 @@ public class PlayerNavigation : MonoBehaviour {
 
     public BycicleBehaviour bb;
 
+    public GameObject cycle;
     
 
 
@@ -55,16 +56,20 @@ public class PlayerNavigation : MonoBehaviour {
         //zuweisen von animations, materials, etc.
 
         //mainCamera = GameObject.FindObjectOfType<Camera>();
-        //holder = GameObject.Find("Flystick");
+        //holder = GameObject.Find("CameraHolder");
+        //Transform t = GameObject.Find("Origin(Clone)").transform;
 
         //this.transform.LookAt(holder.transform.position + holder.transform.forward * 2f);
         //this.transform.SetParent(holder.transform);
         //////  this.transform.rotation.SetEulerAngles(holder.transform.rotation.eulerAngles.z, -holder.transform.rotation.eulerAngles.y - 90f, holder.transform.rotation.eulerAngles.x);
-        //this.transform.localPosition = new Vector3(0, 0, 3f);
-        //this.transform.localRotation = Quaternion.identity;
+        //this.transform.localPosition = new Vector3(0, 0, 0);
+        //this.transform.localEulerAngles = new Vector3(0, 0, 0);
+        //this.transform.rotation *= Quaternion.Euler(Cave.NodeInformation.own.cameraRoation); ;
 
-     
-        
+
+
+
+
         time.text = Cave.TimeSynchronizer.timeHour.ToString("D2") + ":" + Cave.TimeSynchronizer.timeMinute.ToString("D2");
         velocity.text = "xx km/h";
 

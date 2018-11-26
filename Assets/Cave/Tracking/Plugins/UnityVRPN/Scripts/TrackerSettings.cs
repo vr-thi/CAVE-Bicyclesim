@@ -115,7 +115,8 @@ public class TrackerSettings : MonoBehaviour
         while (true)
         {
             if (hostSettings != null && !hostSettings.GetPosition(objectName, channel).Equals(new Quaternion(-505, -505, -505, -505)))
-                transform.rotation = hostSettings.GetRotation(objectName, channel);
+                //transform.rotation = hostSettings.GetRotation(objectName, channel);
+                transform.localRotation = hostSettings.GetRotation(objectName, channel);
             yield return null;
         }
     }
