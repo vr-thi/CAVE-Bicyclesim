@@ -191,6 +191,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4803347295156310}
   - component: {fileID: 114334690834584658}
+  - component: {fileID: 54491742289129196}
+  - component: {fileID: 65667709912890122}
   m_Layer: 4
   m_Name: AR-HUD (1)
   m_TagString: Untagged
@@ -225,8 +227,6 @@ GameObject:
   - component: {fileID: 4013201017129248}
   - component: {fileID: 33672686935385152}
   - component: {fileID: 23065319243615986}
-  - component: {fileID: 65571127006989392}
-  - component: {fileID: 54660297713897132}
   m_Layer: 4
   m_Name: Plane
   m_TagString: Untagged
@@ -307,8 +307,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1190390125895862}
-  m_LocalRotation: {x: -0.000000039993218, y: 0.7071065, z: -0.00000022351742, w: 0.7071072}
-  m_LocalPosition: {x: 42.162643, y: -1.4791632, z: -28.299301}
+  m_LocalRotation: {x: -0.000009478406, y: -0.045474745, z: -0.00002487749, w: 0.9989655}
+  m_LocalPosition: {x: 0.47125626, y: -1.4791307, z: 2.7566643}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4617598265554866}
@@ -841,12 +841,12 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1242284454929896}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &54660297713897132
+--- !u!54 &54491742289129196
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1486105170833698}
+  m_GameObject: {fileID: 1407285111720984}
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
@@ -856,18 +856,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65571127006989392
+--- !u!65 &65667709912890122
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1486105170833698}
+  m_GameObject: {fileID: 1407285111720984}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 28.5, y: 2.45, z: 45.94}
-  m_Center: {x: 0, y: 20.38, z: 0}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 1.11}
 --- !u!81 &81646712333448814
 AudioListener:
   m_ObjectHideFlags: 1
@@ -909,7 +909,7 @@ TextMesh:
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4293722367
+    rgba: 4294901790
 --- !u!102 &102342433445034648
 TextMesh:
   serializedVersion: 3
@@ -930,7 +930,7 @@ TextMesh:
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4293722367
+    rgba: 4294901790
 --- !u!102 &102463063208726754
 TextMesh:
   serializedVersion: 3
@@ -951,7 +951,7 @@ TextMesh:
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4293722367
+    rgba: 4294901790
 --- !u!114 &114048319117929984
 MonoBehaviour:
   m_ObjectHideFlags: 1

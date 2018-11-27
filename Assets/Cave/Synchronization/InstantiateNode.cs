@@ -89,14 +89,14 @@ namespace Cave
                         //Apply the interpupillary distance
                         //Maybe we need to change this a bit, so that the distance is calculated by considering the direction the User looks.
                         //We see that when we test it.   
-                        //if (NodeInformation.own.cameraEye == "left")
-                        //{
-                        //    CameraTransform.localPosition += new Vector3(-0.03f, 0, 0);
-                        //}
-                        //else
-                        //{
-                        //    CameraTransform.localPosition += new Vector3(0.03f, 0, 0);
-                        //}
+                        if (NodeInformation.own.cameraEye == "left")
+                        {
+                            CameraTransform.localPosition += new Vector3(-0.03f, 0, 0);
+                        }
+                        else
+                        {
+                            CameraTransform.localPosition += new Vector3(0.03f, 0, 0);
+                        }
                     }
                 }
             }

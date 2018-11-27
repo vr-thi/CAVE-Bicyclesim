@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Cave
 {
    
-    public class Synchronizer : MonoBehaviour
+    public class Synchronizer: MonoBehaviour
     {
         public string[] relevantAxes = { "Vertical", "Horizontal" };
         public string[] relevantButtons = { };
@@ -56,6 +57,7 @@ namespace Cave
 
         void Update()
         {
+
             CheckConnection();
 
             if (NodeInformation.isMaster())
@@ -70,6 +72,11 @@ namespace Cave
                 TransformationSynchronizer.BuildMessage(inputMessage.inputTransformationMessage);
                 EventSynchronizer.BuildMessage(inputMessage.inputEventsMessage);
                 VelocitySynchronizer.BuildMessage(inputMessage.inputVelocityMessage);
+                //GenericSynchronizer<float>.BuildMessage(inputMessage.genericFloat, 0f);
+
+                //List<GenericSynchronizer<T>> test = new List<GenericSynchronizer<T>>();
+                //foreach(var el in inputMessage.generic)
+                
 
                 node.BroadcastMessage(inputMessage);
             }

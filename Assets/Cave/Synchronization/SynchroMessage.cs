@@ -1,4 +1,5 @@
 ﻿using AwesomeSockets.Buffers;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Cave
@@ -8,7 +9,7 @@ namespace Cave
     {
         void Serialize(Buffer buffer);
         void Deserialize(Buffer buffer);
-
+ 
         int GetLength();
     }
 
@@ -22,6 +23,10 @@ namespace Cave
         public InputTransformationMessage inputTransformationMessage = new InputTransformationMessage();
         public InputEventsMessage inputEventsMessage = new InputEventsMessage();
         public InputVelocityMessage inputVelocityMessage = new InputVelocityMessage();
+        //public List<GenericMessage<T>> genericElements = new List<GenericMessage<T>>();
+        //List<GenericMessage<T>> genericList = new List<GenericMessage<T>>();
+
+
 
         public void Serialize(Buffer buffer)
         {
@@ -33,6 +38,12 @@ namespace Cave
             inputTransformationMessage.Serialize(buffer);
             inputEventsMessage.Serialize(buffer);
             inputVelocityMessage.Serialize(buffer);
+            
+            //foreach (var el in genericElements)
+            //{
+            //    el.Serialize(buffer);
+            //    genericList.Add(el);
+            //}
         }
 
         public void Deserialize(Buffer buffer)
@@ -45,11 +56,13 @@ namespace Cave
             inputTransformationMessage.Deserialize(buffer);
             inputEventsMessage.Deserialize(buffer);
             inputVelocityMessage.Deserialize(buffer);
+            //genericFloat.Deserialize(buffer);
         }
 
         public int GetLength()
         {
-            return inputTimeMessage.GetLength() + inputParticleMessage.GetLength() + inputInputMessage.GetLength() + inputAnimatorMessage.GetLength() + inputTrackingMessage.GetLength() + inputTransformationMessage.GetLength() + inputEventsMessage.GetLength() + inputVelocityMessage.GetLength();
+            return inputTimeMessage.GetLength() + inputParticleMessage.GetLength() + inputInputMessage.GetLength() + inputAnimatorMessage.GetLength() + inputTrackingMessage.GetLength() + inputTransformationMessage.GetLength() + inputEventsMessage.GetLength() + inputVelocityMessage.GetLength()
+               /* + genericFloat.GetLength()*/;
         }
     }
 
