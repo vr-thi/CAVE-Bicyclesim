@@ -456,7 +456,7 @@ public class NavigationPath : MonoBehaviour
 
 
         //catch if length of this part is smaller than DISTANCE_BETWEEN_POINTS
-        Debug.Log("leng: " + length + ", offset " + offset);
+        //Debug.Log("leng: " + length + ", offset " + offset);
         if (length - offset < DISTANCE_BETWEEN_POINTS && offset > length)
         {
             offset = offset - length;
@@ -483,17 +483,17 @@ public class NavigationPath : MonoBehaviour
             newDistancePosition.transform.SetParent(this.gameObject.transform);
             distancePointsPosition.Add(newPosition);
             distancePoints.Add(newDistancePosition);
-            Debug.Log("DistancePoint i, " + newDistancePosition.ToString());
+            //Debug.Log("DistancePoint i, " + newDistancePosition.ToString());
             //newDistancePosition.AddComponent<DistancePointProperties>();
             //newDistancePosition.GetComponent<DistancePointProperties>().
         }
 
 
-        Debug.Log("offsetCalculation; DBP " + DISTANCE_BETWEEN_POINTS + " -length " + length + " -offset " + offset);
+        //Debug.Log("offsetCalculation; DBP " + DISTANCE_BETWEEN_POINTS + " -length " + length + " -offset " + offset);
         offset = DISTANCE_BETWEEN_POINTS - ((length - offset) - ((float)((int)((length - offset) / DISTANCE_BETWEEN_POINTS))) * DISTANCE_BETWEEN_POINTS);
         if (offset == DISTANCE_BETWEEN_POINTS)
             offset = 0;
-        Debug.Log("offset: " + offset);
+        //Debug.Log("offset: " + offset);
 
 
         return offset;
@@ -522,11 +522,11 @@ public class NavigationPath : MonoBehaviour
 
         LengthBetweenWaypoints.Add(length);
 
-        Debug.Log("leng: " + length + ", offset " + offset);
+       // Debug.Log("leng: " + length + ", offset " + offset);
         if (length - offset < DISTANCE_BETWEEN_POINTS && offset > length)
         {
             offset = offset - length;//DISTANCE_BETWEEN_POINTS - (length - offset);
-            Debug.Log("offset as offset > length: " + offset);
+            //Debug.Log("offset as offset > length: " + offset);
             return offset;
         }
 
@@ -551,11 +551,11 @@ public class NavigationPath : MonoBehaviour
 
 
 
-        Debug.Log("offsetCalculation; DBP " + DISTANCE_BETWEEN_POINTS + " -length " + length + " -offset " + offset);
+        //Debug.Log("offsetCalculation; DBP " + DISTANCE_BETWEEN_POINTS + " -length " + length + " -offset " + offset);
         offset = DISTANCE_BETWEEN_POINTS - ((length - offset) - ((float)((int)((length - offset) / DISTANCE_BETWEEN_POINTS))) * DISTANCE_BETWEEN_POINTS);
         if (offset == DISTANCE_BETWEEN_POINTS)
             offset = 0;
-        Debug.Log("offset: " + offset);
+        //Debug.Log("offset: " + offset);
 
         //offset = DISTANCE_BETWEEN_POINTS - (length-offset) - (float)((int)length / DISTANCE_BETWEEN_POINTS) * DISTANCE_BETWEEN_POINTS;
         return offset;
@@ -585,11 +585,11 @@ public class NavigationPath : MonoBehaviour
 
         LengthBetweenWaypoints.Add(length);
 
-        Debug.Log("leng: " + length + ", offset " + offset);
+        //Debug.Log("leng: " + length + ", offset " + offset);
         if (length - offset < DISTANCE_BETWEEN_POINTS && offset > length)
         {
             offset = offset - length; //DISTANCE_BETWEEN_POINTS - (length - offset);
-            Debug.Log("offset as offset > length: " + offset);
+            ///Debug.Log("offset as offset > length: " + offset);
             return offset;
         }
 
@@ -610,11 +610,11 @@ public class NavigationPath : MonoBehaviour
             distanceInitCounter++;
         }
 
-        Debug.Log("offsetCalculation; DBP " + DISTANCE_BETWEEN_POINTS + " -length " + length + " -offset " + offset);
+        //Debug.Log("offsetCalculation; DBP " + DISTANCE_BETWEEN_POINTS + " -length " + length + " -offset " + offset);
         offset = DISTANCE_BETWEEN_POINTS - ((length - offset) - ((float)((int)((length - offset) / DISTANCE_BETWEEN_POINTS))) * DISTANCE_BETWEEN_POINTS);
         if (offset == DISTANCE_BETWEEN_POINTS)
             offset = 0;
-        Debug.Log("offset: " + offset);
+        //Debug.Log("offset: " + offset);
 
         //offset = DISTANCE_BETWEEN_POINTS - (length-offset) - (float)((int)length / DISTANCE_BETWEEN_POINTS) * DISTANCE_BETWEEN_POINTS;
         return offset;

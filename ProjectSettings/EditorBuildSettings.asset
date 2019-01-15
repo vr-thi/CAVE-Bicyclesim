@@ -6,5 +6,5 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/BycicleSim.unity
+    path: Assets/Scenes/BycicleSim.unity
     guid: fb4d5530e751ea044b827573552a9f7f

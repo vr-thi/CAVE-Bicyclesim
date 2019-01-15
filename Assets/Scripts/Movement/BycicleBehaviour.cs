@@ -104,6 +104,12 @@ public class BycicleBehaviour : MonoBehaviour
         }
     }
 
+    private GameObject origin;
+
+    public void SetOrigin(GameObject orig)
+    {
+        origin = orig;
+    }
 
 
     void Start()
@@ -117,7 +123,7 @@ public class BycicleBehaviour : MonoBehaviour
         if (GetComponent<NetworkIdentity>().isServer || controller.vive)
         {
             dataInput = this.gameObject.AddComponent<TCP_Stream>();
-            dataInput.speed.changeSampleCount(2);
+            //dataInput.speed.changeSampleCount(2);
         }
 
         // Cycle didnt move yet
@@ -168,7 +174,7 @@ public class BycicleBehaviour : MonoBehaviour
             // Apply the data to the ingame Cycle
             ApplySensorDataToBycicle();
 
-          //  velocity.text = speed.ToString() + " km/h";
+            //  velocity.text = speed.ToString() + " km/h";
 
             //Lerp the Debug Camera smoothly along with the cyclist, attaching the gameObject like this reduces jitter drastically 
             cameraHolder.transform.position = Vector3.Lerp(cameraHolder.gameObject.transform.position, camLerpPoint.transform.position, .5f);
@@ -177,30 +183,24 @@ public class BycicleBehaviour : MonoBehaviour
             // if the cylce is shown, various gameObjects are set active, or inactive
             ShowVirtualBicycle();
         }
-
-
-
-
-
-
         // if in Debug Mode, take the Data from inEditorValues
-        else if (controller.debugging)
-        {
-            angle = angleDebug;
-            speed = speedDebug;
-        }
+        //else if (controller.debugging)
+        //{
+        //    angle = angleDebug;
+        //    speed = speedDebug;
+        //}
 
 
-        if (Time.time - timer <= 1.0f)
-        {
-            framecounter++;
-        }
-        else if (Time.time - timer > 1.0f)
-        {
-            Debug.Log("Frames/s" + framecounter);
-            framecounter = 0;
-            timer = Time.time; 
-        }
+        //if (Time.time - timer <= 1.0f)
+        //{
+        //    framecounter++;
+        //}
+        //else if (Time.time - timer > 1.0f)
+        //{
+        //    Debug.Log("Frames/s" + framecounter);
+        //    framecounter = 0;
+        //    timer = Time.time; 
+        //}
 
 
     }
@@ -246,8 +246,7 @@ public class BycicleBehaviour : MonoBehaviour
 
             // rotate the Cycle around the turningCenter with the given speed
             float curTurnRadius = turnRadius / Mathf.Rad2Deg;
-            transform.RotateAround(turningCenter, Vector3.up, -(originalSpeed / curTurnRadius) * TimeSynchronizer.deltaTime);
-
+            transform.RotateAround(turningCenter, Vector3.up, -(originalSpeed / curTurnRadius) * Time.deltaTime);
 
 
             // you can try tilting but for me it made motion sickness occur stronger
@@ -263,7 +262,7 @@ public class BycicleBehaviour : MonoBehaviour
         {
             // rotate the Cycle around the turningCenter with the given speed
             float curTurnRadius = turnRadius / Mathf.Rad2Deg;
-            transform.RotateAround(turningCenter, Vector3.up, (originalSpeed / curTurnRadius)  * TimeSynchronizer.deltaTime);
+            transform.RotateAround(turningCenter, Vector3.up, (originalSpeed / curTurnRadius)  * Time.deltaTime);
 
             // you can try tilting but for me it made motion sickness occur stronger
             if (tiltCycle)
@@ -275,10 +274,10 @@ public class BycicleBehaviour : MonoBehaviour
         }
 
 
-        float cycleSpeed = ((this.transform.position - posLastFrame).magnitude) / TimeSynchronizer.deltaTime;
+        float cycleSpeed = ((this.transform.position - posLastFrame).magnitude) / Time.deltaTime;
         posLastFrame = this.transform.position;
 
-        Debug.Log("currentSpeed: " + speed * 3.6f + " SpeedINgameCycle: " + cycleSpeed * 3.6f + " faktor" + (originalSpeed / cycleSpeed)); 
+        //Debug.Log("currentSpeed: " + speed * 3.6f + " SpeedINgameCycle: " + cycleSpeed * 3.6f + " faktor" + (originalSpeed / cycleSpeed)); 
 
 
     }
@@ -340,12 +339,12 @@ public class BycicleBehaviour : MonoBehaviour
        //activate / deactivate various components
     void ShowVirtualBicycle()
     {
-        handlebar.SetActive(controller.showVirualBycicle);
-        frame.SetActive(controller.showVirualBycicle);
-        wheelV.SetActive(controller.showVirualBycicle);
-        wheelH.SetActive(controller.showVirualBycicle);
+        handlebar.SetActive(controller.showVirtualBicycle);
+        frame.SetActive(controller.showVirtualBicycle);
+        wheelV.SetActive(controller.showVirtualBicycle);
+        wheelH.SetActive(controller.showVirtualBicycle);
 
-        if (controller.showVirualBycicle)
+        if (controller.showVirtualBicycle)
         {
             Vector3 steeringAngle = new Vector3(0, angle, 0);
             handlebar.transform.localEulerAngles = steeringAngle;

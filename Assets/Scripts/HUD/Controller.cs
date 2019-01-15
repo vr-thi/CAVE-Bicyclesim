@@ -11,7 +11,7 @@ public class Controller : MonoBehaviour {
     public GameObject cave;
     public GameObject vive;
 
-    public bool showVirualBycicle; 
+    public bool showVirtualBicycle; 
 
 
 
