@@ -24,6 +24,7 @@ public class SpawnableObject : MonoBehaviour
 
     protected DataDistributor mySyncScript;
 
+    protected float updateFrequency = 1f / 60f;
 
 
     public void Init()

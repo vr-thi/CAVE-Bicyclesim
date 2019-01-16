@@ -19,7 +19,7 @@ public class MyNetworkTransform : SpawnableObject {
         mySyncScript.AddToSyncDictionary(ref mySelfReferenceTag, this);
 
         if (ines.isServer)
-            InvokeRepeating("MyUpdate", 0, 0.02f);
+            InvokeRepeating("MyUpdate", 0, updateFrequency);
     }
 
     public override void MyUpdate()

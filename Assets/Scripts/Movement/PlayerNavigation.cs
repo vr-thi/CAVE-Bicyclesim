@@ -90,7 +90,7 @@ public class PlayerNavigation: SpawnableObject
         naviRenderer.material = transparent;
 
         if(ines.isServer)
-            InvokeRepeating("MyUpdate", 0, 0.02f);
+            InvokeRepeating("MyUpdate", 0, updateFrequency);
     }
 
 
